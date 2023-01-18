@@ -11,14 +11,18 @@
          </run>
       </application>
    </extension>
+   
+   <!--扩展perspectives-->
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.ost.jacky.demo.Perspective"
-            name="Perspective"
+            name="Demo Perspective"
             id="com.ost.jacky.demo.perspective">
       </perspective>
    </extension>
+   
+   <!-- 扩展Views -->
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -28,6 +32,8 @@
             inject="true">
       </view>
    </extension>
+   
+   
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
