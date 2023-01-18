@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Demo
+Bundle-SymbolicName: com.ost.jacky.demo;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.ost.jacky.demo.Activator
+Bundle-Vendor: OST
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.apache.felix.scr,
+ org.eclipse.equinox.event
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Automatic-Module-Name: com.ost.jacky.demo
+Import-Package: javax.inject
+Bundle-ActivationPolicy: lazy
