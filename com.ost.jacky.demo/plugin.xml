@@ -31,6 +31,18 @@
             id="com.ost.jacky.demo.view"
             inject="true">
       </view>
+            <view
+            class="com.ost.jacky.demo.viewers.View1"
+            name="View1"
+            id="com.ost.jacky.demo.viewers.view1"
+            inject="true">
+      </view>
+            <view
+            class="com.ost.jacky.demo.viewers.View2"
+            name="View2"
+            id="com.ost.jacky.demo.viewers.view2"
+            inject="true">
+      </view>
    </extension>
    
    
@@ -42,7 +54,24 @@
                id="com.ost.jacky.demo.view"
                minimized="false"
                relationship="left"
-               standalone="true"
+               ratio="0.25f"
+               standalone="false"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               id="com.ost.jacky.demo.viewers.view1"
+               minimized="false"
+               relationship="bottom"
+               ratio="0.5f"
+               standalone="false"
+               relative="com.ost.jacky.demo.view">
+         </view>
+         <view
+               id="com.ost.jacky.demo.viewers.view2"
+               minimized="false"
+               relationship="left"
+               ratio="0.5f"
+               standalone="false"
                relative="org.eclipse.ui.editorss">
          </view>
       </perspectiveExtension>
