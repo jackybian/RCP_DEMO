@@ -18,7 +18,7 @@ public class NavigatorEntityFactory {
 		    // level two 二级节点
 		    NavigatorEntityElement element1 = new NavigatorEntityElement(1, "Patient Information");
 		    NavigatorEntityElement element2 = new NavigatorEntityElement(1, "Diagnose Information");
-		    NavigatorEntityElement element3 = new NavigatorEntityElement(1, "Expense Information");
+		    NavigatorEntityElement element3 = new NavigatorEntityElement(1, "Expense Information-1");
 
 		    // 将下级节点添加到上级
 		    root1.addChildren(element1);
