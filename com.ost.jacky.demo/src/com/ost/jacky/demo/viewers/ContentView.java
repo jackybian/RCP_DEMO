@@ -37,26 +37,16 @@ import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerLa
 
 public class ContentView extends EditorPart{
 	public static final String ID = "com.ost.jacky.demo.content";
-
-	@Inject IWorkbench workbench;
 	
 	private PatientDAO patientDAO;
 	
 	private TableViewer tableViewer;
 	
-	private class StringLabelProvider extends ColumnLabelProvider {
-		
-		// getText method is used from super class ColumnLabelProvider
 
-		@Override
-		public Image getImage(Object obj) {
-			return workbench.getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
-		}
-
-	}
 
 	@Override
 	public void createPartControl(Composite parent) {
+		System.out.println("ContentView createPartControl start=====");
 		patientDAO = new PatientDAO();
 	    // 首先创建一个ViewForm对象，它方便于控件的布局
 	    ViewForm viewForm = new ViewForm(parent, SWT.NONE);
@@ -131,6 +121,7 @@ public class ContentView extends EditorPart{
 	}
 	
 	 private void createTableViewer(Composite composite) {
+		 System.out.println("ContentView createTableViewer start=====");
 //	    tableViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
 	    tableViewer = new TableViewer(composite, SWT.FULL_SELECTION);
 	    Table table = tableViewer.getTable();

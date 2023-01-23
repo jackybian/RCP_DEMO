@@ -49,14 +49,16 @@
             id="com.ost.jacky.demo.viewers.view3"
             inject="true">
       </view>
-      <view
-            class="com.ost.jacky.demo.viewers.ContentView"
-            name="Content"
-            id="com.ost.jacky.demo.viewers.content"
-            inject="true">
-      </view>
    </extension>
-   
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.ost.jacky.demo.editors.PatientInfoEditor"
+            default="false"
+            id="com.ost.jacky.demo.editors.PatientInfoEditor"
+            name="Patient Information Management">
+      </editor>
+   </extension>   
    
 
    <extension

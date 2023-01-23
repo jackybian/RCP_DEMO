@@ -42,6 +42,7 @@ public class View extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		System.out.println("View createPartControl start=====");
 	    // 创建树查看器
 	    treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 	    // 设置内容提供其和标签提供器
@@ -54,6 +55,7 @@ public class View extends ViewPart {
 	    setViewToolBar();
 	    // 自定义的方法，实现双击打开相应的编辑器的功能
 	    hookDoubleClickAction();
+	    System.out.println("View createPartControl end=====");
 	}
 
 	  // 这个方法实际上就是给treeviewer添加了一个处理双击事件的监听器
@@ -85,8 +87,10 @@ public class View extends ViewPart {
 	        }else if (element.getName().equals("Expense Information")) {// 费用信息管理
 	          editorID = PluginUtil.ExpenseInfoEditor_ID;
 	        }else{
+	          System.out.println("View hookDoubleClickAction editorID is null=====");
 	          return;
 	        }
+	        System.out.println("View hookDoubleClickAction editorID is =====" + editorID);
 	        //IEditorPart:An editor is a visual component within a workbench page.
 	        IEditorPart editorPart = workbenchPage.findEditor(editorInput);
 	        if(editorPart != null){//已经打开了所需的编辑器
@@ -95,6 +99,7 @@ public class View extends ViewPart {
 	          try {
 	            editorPart = workbenchPage.openEditor(editorInput, editorID);
 	          } catch (Exception e) {
+	        	System.out.println("View hookDoubleClickAction editorID error =====" + editorID);
 	            e.printStackTrace();
 	          }
 	        }

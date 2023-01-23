@@ -3,6 +3,8 @@ package com.ost.jacky.demo.navigator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ost.jacky.demo.editors.editorInput.PatientInfoEditorInput;
+
 public class NavigatorEntityFactory {
 	  public static Object setNavigatorEntity() {
 		    /**
@@ -26,7 +28,7 @@ public class NavigatorEntityFactory {
 		    root2.addChildren(element3);
 
 		    // 设置编辑器
-//		    element1.setEditorInput(new PatientInfoEditorInput());
+		    element1.setEditorInput(new PatientInfoEditorInput());
 //		    element2.setEditorInput(new DiagnoseInfoEditorInput());
 //		    element3.setEditorInput(new ExpenseInfoEditorInput());
 
