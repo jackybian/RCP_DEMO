@@ -58,52 +58,7 @@
    </extension>
    
    
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="*">
-         <view
-               id="com.ost.jacky.demo.view"
-               minimized="false"
-               relationship="left"
-               ratio="0.3f"
-               standalone="false"
-               relative="org.eclipse.ui.editorss">
-         </view>
-         <view
-               id="com.ost.jacky.demo.viewers.view1"
-               minimized="false"
-               relationship="bottom"
-               ratio="0.4f"
-               standalone="false"
-               relative="com.ost.jacky.demo.view">
-         </view>
-         <view
-               id="com.ost.jacky.demo.viewers.content"
-               minimized="false"
-               relationship="right"
-               ratio="0.5f"
-               standalone="false"
-               relative="org.eclipse.ui.editorss">
-         </view>
-         <view
-               id="com.ost.jacky.demo.viewers.view2"
-               minimized="false"
-               relationship="bottom"
-               ratio="0.5f"
-               standalone="false"
-               relative="com.ost.jacky.demo.viewers.content">
-         </view>
-         <view
-               id="com.ost.jacky.demo.viewers.view3"
-               minimized="false"
-               relationship="stack"
-               ratio="0.5f"
-               standalone="false"
-               relative="com.ost.jacky.demo.viewers.view2">
-         </view>
-      </perspectiveExtension>
-   </extension>
+
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
