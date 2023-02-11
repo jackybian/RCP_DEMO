@@ -37,14 +37,13 @@ import com.ost.jacky.demo.viewers.viewerContentProvider.NavigatorTreeViewerLabel
 public class View extends ViewPart {
 	public static final String ID = "com.ost.jacky.demo.view";
 
-	@Inject IWorkbench workbench;
+	@Inject 
+	private IWorkbench workbench;
 	
 	private TreeViewer treeViewer;
 
 	@Override
 	public void createPartControl(Composite parent) {
-		System.out.println("View createPartControl start=====");
-	    // 创建树查看器
 	    treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 	    // 设置内容提供其和标签提供器
 	    treeViewer.setContentProvider(new NavigatorTreeViewerContentProvider());
@@ -56,7 +55,6 @@ public class View extends ViewPart {
 	    setViewToolBar();
 	    // 自定义的方法，实现双击打开相应的编辑器的功能
 	    hookDoubleClickAction();
-	    System.out.println("View createPartControl end=====");
 	}
 
 	  // 这个方法实际上就是给treeviewer添加了一个处理双击事件的监听器
@@ -73,20 +71,11 @@ public class View extends ViewPart {
 	        IEditorInput editorInput = element.getEditorInput();
 	        // 得到当前工作台的page
 	        IWorkbenchPage workbenchPage = getViewSite().getPage();
-	        // 如果点击的是 信息查询
-//	        if (element.getName().equals("Information Search")) {
-//	          new OpenSearchViewAction(getSite().getWorkbenchWindow()).run();
-//	          return;
-//	        }
 	        String editorID = null;
 	        // 这里要结合NavigatorEntityFactory类的setNavigatorEntity方法
 	        // 这一部分对原书作了修改，化繁为简
 	        if (element.getName().equals("Patient Information")) {// 病人信息管理
 	          editorID = PluginUtil.PatientInfoEditor_ID;
-	        }else if (element.getName().equals("Diagnose Information")) {// 诊断信息管理
-	          editorID = PluginUtil.DiagnoseInfoEditor_ID;
-	        }else if (element.getName().equals("Expense Information")) {// 费用信息管理
-	          editorID = PluginUtil.ExpenseInfoEditor_ID;
 	        }else{
 	          System.out.println("View hookDoubleClickAction editorID is null=====");
 	          return;
@@ -102,7 +91,6 @@ public class View extends ViewPart {
 	          try {
 	            editorPart = workbenchPage.openEditor(editorInput, editorID);
 	          } catch (Exception e) {
-	        	System.out.println("View hookDoubleClickAction editorID error =====" + editorID);
 	            e.printStackTrace();
 	          }
 	        }
