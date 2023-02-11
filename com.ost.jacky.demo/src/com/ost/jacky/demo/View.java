@@ -65,12 +65,12 @@ public class View extends ViewPart {
 	    // 设置视图的工具栏
 	    //etViewToolBar();
 	    // 自定义的方法，实现双击打开相应的编辑器的功能
-	    //hookDoubleClickAction();
+	    hookDoubleClickAction();
 	}
 	
     private ImageDescriptor createImageDescriptor() {
         Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-        URL url = FileLocator.find(bundle, new Path("icons/folder.png"), null);
+        URL url = FileLocator.find(bundle, new Path("icons/folder.ico"), null);
         return ImageDescriptor.createFromURL(url);
     }
 
@@ -82,35 +82,36 @@ public class View extends ViewPart {
 	        ISelection selection = treeViewer.getSelection();
 	        // 得到选中的项，注意方法是将得到的选项转换成 IStructuredSelection，再调用 getFirstElement 方法
 	        Object object = ((IStructuredSelection) selection).getFirstElement();
+	        System.out.println(object);
 	        // 再将对象转为实际的树节点对象
 	        NavigatorEntityElement element = (NavigatorEntityElement) object;
-	        // 得到该对象的editorInput
-	        IEditorInput editorInput = element.getEditorInput();
-	        // 得到当前工作台的page
-	        IWorkbenchPage workbenchPage = getViewSite().getPage();
-	        String editorID = null;
+//	        // 得到该对象的editorInput
+//	        IEditorInput editorInput = element.getEditorInput();
+//	        // 得到当前工作台的page
+//	        IWorkbenchPage workbenchPage = getViewSite().getPage();
+//	        String editorID = null;
 	        // 这里要结合NavigatorEntityFactory类的setNavigatorEntity方法
 	        // 这一部分对原书作了修改，化繁为简
-	        if (element.getName().equals("Patient Information")) {// 病人信息管理
-	          editorID = PluginUtil.PatientInfoEditor_ID;
-	        }else{
-	          System.out.println("View hookDoubleClickAction editorID is null=====");
-	          return;
-	        }
-	        System.out.println("View hookDoubleClickAction editorID is =====" + editorID);
-	        PatientInfoEditorInput in = (PatientInfoEditorInput)editorInput;
-	        in.setValue("dsfsdafdsfdsf");
-	        //IEditorPart:An editor is a visual component within a workbench page.
-	        IEditorPart editorPart = workbenchPage.findEditor(in);
-	        if(editorPart != null){//已经打开了所需的编辑器
-	          workbenchPage.bringToTop(editorPart);
-	        }else {//没有打开就打开来
-	          try {
-	            editorPart = workbenchPage.openEditor(editorInput, editorID);
-	          } catch (Exception e) {
-	            e.printStackTrace();
-	          }
-	        }
+//	        if (element.getName().equals("Patient Information")) {// 病人信息管理
+//	          editorID = PluginUtil.PatientInfoEditor_ID;
+//	        }else{
+//	          System.out.println("View hookDoubleClickAction editorID is null=====");
+//	          return;
+//	        }
+//	        System.out.println("View hookDoubleClickAction editorID is =====" + editorID);
+//	        PatientInfoEditorInput in = (PatientInfoEditorInput)editorInput;
+//	        in.setValue("dsfsdafdsfdsf");
+//	        //IEditorPart:An editor is a visual component within a workbench page.
+//	        IEditorPart editorPart = workbenchPage.findEditor(in);
+//	        if(editorPart != null){//已经打开了所需的编辑器
+//	          workbenchPage.bringToTop(editorPart);
+//	        }else {//没有打开就打开来
+//	          try {
+//	            editorPart = workbenchPage.openEditor(editorInput, editorID);
+//	          } catch (Exception e) {
+//	            e.printStackTrace();
+//	          }
+//	        }
 	      }
 	    });
 	  }
