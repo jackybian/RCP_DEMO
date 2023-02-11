@@ -1,13 +1,19 @@
 package com.ost.jacky.demo;
 
+import java.io.File;
+import java.net.URL;
 import java.util.*;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -26,6 +32,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 import com.ost.jacky.demo.editors.editorInput.PatientInfoEditorInput;
 import com.ost.jacky.demo.navigator.NavigatorEntityElement;
@@ -33,6 +41,8 @@ import com.ost.jacky.demo.navigator.NavigatorEntityFactory;
 import com.ost.jacky.demo.util.PluginUtil;
 import com.ost.jacky.demo.viewers.viewerContentProvider.NavigatorTreeViewerContentProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.NavigatorTreeViewerLabelProvider;
+import com.ost.jacky.demo.viewers.viewerContentProvider.ViewContentProvider;
+import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 
 public class View extends ViewPart {
 	public static final String ID = "com.ost.jacky.demo.view";
@@ -46,16 +56,23 @@ public class View extends ViewPart {
 	public void createPartControl(Composite parent) {
 	    treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 	    // 设置内容提供其和标签提供器
-	    treeViewer.setContentProvider(new NavigatorTreeViewerContentProvider());
-	    treeViewer.setLabelProvider(new NavigatorTreeViewerLabelProvider());
+	    treeViewer.setContentProvider(new ViewContentProvider());
+	    treeViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(
+                new ViewLabelProvider(createImageDescriptor())));
 	    // 读入数据
-	    treeViewer.setInput(NavigatorEntityFactory.setNavigatorEntity());
+	    treeViewer.setInput(File.listRoots());
 	    // 自定义的方法
 	    // 设置视图的工具栏
-	    setViewToolBar();
+	    //etViewToolBar();
 	    // 自定义的方法，实现双击打开相应的编辑器的功能
-	    hookDoubleClickAction();
+	    //hookDoubleClickAction();
 	}
+	
+    private ImageDescriptor createImageDescriptor() {
+        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+        URL url = FileLocator.find(bundle, new Path("icons/folder.png"), null);
+        return ImageDescriptor.createFromURL(url);
+    }
 
 	  // 这个方法实际上就是给treeviewer添加了一个处理双击事件的监听器
 	  private void hookDoubleClickAction() {
