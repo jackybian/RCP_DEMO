@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
+import com.ost.jacky.demo.editors.editorInput.PatientInfoEditorInput;
 import com.ost.jacky.demo.navigator.NavigatorEntityElement;
 import com.ost.jacky.demo.navigator.NavigatorEntityFactory;
 import com.ost.jacky.demo.util.PluginUtil;
@@ -91,8 +92,10 @@ public class View extends ViewPart {
 	          return;
 	        }
 	        System.out.println("View hookDoubleClickAction editorID is =====" + editorID);
+	        PatientInfoEditorInput in = (PatientInfoEditorInput)editorInput;
+	        in.setValue("dsfsdafdsfdsf");
 	        //IEditorPart:An editor is a visual component within a workbench page.
-	        IEditorPart editorPart = workbenchPage.findEditor(editorInput);
+	        IEditorPart editorPart = workbenchPage.findEditor(in);
 	        if(editorPart != null){//已经打开了所需的编辑器
 	          workbenchPage.bringToTop(editorPart);
 	        }else {//没有打开就打开来

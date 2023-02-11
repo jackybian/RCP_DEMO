@@ -5,6 +5,16 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 public class PatientInfoEditorInput implements IEditorInput {
+	
+	private String value;
+	
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	public String getValue() {
+		return value;
+	}
 
 	@Override
 	public Object getAdapter(Class adapter) {

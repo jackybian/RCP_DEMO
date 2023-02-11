@@ -47,6 +47,7 @@ public class ContentView extends EditorPart{
 	@Override
 	public void createPartControl(Composite parent) {
 		System.out.println("ContentView createPartControl start=====");
+		System.out.println("name=" + this.getEditorInput().getName());
 		patientDAO = new PatientDAO();
 	    // 首先创建一个ViewForm对象，它方便于控件的布局
 	    ViewForm viewForm = new ViewForm(parent, SWT.NONE);
