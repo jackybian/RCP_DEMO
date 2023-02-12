@@ -90,9 +90,10 @@ public class PatientInfoEditor extends EditorPart {
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		TableColumn tc1 = new TableColumn(table, SWT.LEFT);
+		TableColumn tc1 = new TableColumn(table, SWT.CENTER);
 		tc1.setText("Name");
-		tc1.setWidth(60);
+		tc1.setWidth(1000);
+		tc1.setResizable(true);
 	}
 
 	@Override
