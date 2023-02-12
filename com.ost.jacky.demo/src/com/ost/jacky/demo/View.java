@@ -94,15 +94,8 @@ public class View extends ViewPart {
 //	        // 得到当前工作台的page
 	        IWorkbenchPage workbenchPage = getViewSite().getPage();
 	        String editorID = null;
-	        // 这里要结合NavigatorEntityFactory类的setNavigatorEntity方法
-	        // 这一部分对原书作了修改，化繁为简
-//	        if (element.getName().equals("Patient Information")) {// 病人信息管理
-	         editorID = PluginUtil.PatientInfoEditor_ID;
-//	        }else{
-//	          System.out.println("View hookDoubleClickAction editorID is null=====");
-//	          return;
-//	        }
-	        //IEditorPart:An editor is a visual component within a workbench page.
+	        // 其实这边是指定的类路径，要与viewer里面的ID，进行区分开来
+	        editorID = PluginUtil.PatientInfoEditor_ID;
 	        IEditorPart editorPart = workbenchPage.findEditor(fileEditorInput);
 	        if(editorPart != null){//已经打开了所需的编辑器
 	          workbenchPage.bringToTop(editorPart);

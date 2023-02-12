@@ -1,5 +1,6 @@
 package com.ost.jacky.demo.editors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,52 +68,31 @@ public class PatientInfoEditor extends EditorPart {
 		FileEditorInput fileEditorInput = (FileEditorInput)this.getEditorInput();
 		System.out.println("createPartControl fileName" + fileEditorInput.getFileName());
 		patientDAO = new PatientDAO();
-
 		ViewForm viewForm = new ViewForm(parent, SWT.NONE);
 		viewForm.setLayout(new FillLayout());
 		createTableViewer(viewForm);
 		tableViewer.setContentProvider(new PatientInfoTableViewerContentProvider());
 		tableViewer.setLabelProvider(new PatientInfoTableViewerLabelProvider());
-		tableViewer.setInput(patientDAO.getPatientInfoList());
-
-		// ��ӱ༭���Ĺ������������� �޸ģ�ɾ����ˢ�� ������ť
+		List<String> fileList = new ArrayList<String>();
+		fileList.add("dsffdfsfadfdfdsfdljk");
+		fileList.add("ddssssfdfsfdsfdsfdsdsffdfsfadfdfdsfdljk");
+		tableViewer.setInput(fileList);
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
 		toolBarManager.add(new AddPatientAction());
 		toolBarManager.update(true);
-		// This brings the underlying widgets up to date with any changes.
-		
-		// ����viewform
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
 	}
 
 	private void createTableViewer(Composite composite) {
-//		tableViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableViewer = new TableViewer(composite, SWT.FULL_SELECTION);
 		Table table = tableViewer.getTable();
-		// ������ʾ����
 		table.setHeaderVisible(true);
-		// ������ʾ�����
 		table.setLinesVisible(true);
-		// ���ñ��Ĳ��� TableColumnLayout
-		//TODO���ص�ע������Ĳ������ã������У����ᵼ�ºܶ����⣬����������������н���Ŵ���С����
-		//�ӳ٣��ܶ����⣡
-//		table.setLayout(new TableColumnLayout());
-		// ����һ��
 		TableColumn tc1 = new TableColumn(table, SWT.LEFT);
-		// �����б���
 		tc1.setText("Name");
-		// �����п�
 		tc1.setWidth(60);
-		// ������������б����ʱ������
-		// ע�⣺widgetSelected������ĩβһ��Ҫrefresh���������Ա�֤�����ֶ�ˢ�£�
-		// ���У�������һ��SelectionAdapter�Ϳ����ˣ�
-
-		TableColumn tc2 = new TableColumn(table, SWT.LEFT);
-		tc2.setText("Age");
-		tc2.setWidth(100);
-
 	}
 
 	@Override
@@ -123,7 +103,6 @@ public class PatientInfoEditor extends EditorPart {
 		public AddPatientAction() {
 			this.setToolTipText("Add Patient Information");
 		}
-
 		public void run() {
 			System.out.println("AddPatientAction work");
 			tableViewer.setInput(patientDAO.getPatientInfoList());
