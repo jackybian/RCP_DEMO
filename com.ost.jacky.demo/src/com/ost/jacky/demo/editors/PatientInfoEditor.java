@@ -68,24 +68,17 @@ public class PatientInfoEditor extends EditorPart {
 		System.out.println("createPartControl fileName" + fileEditorInput.getFileName());
 		patientDAO = new PatientDAO();
 
-		// ���ȴ���һ��ViewForm�����������ڿؼ��Ĳ���
 		ViewForm viewForm = new ViewForm(parent, SWT.NONE);
-		// ����
 		viewForm.setLayout(new FillLayout());
-		// ����TableViewer
 		createTableViewer(viewForm);
 		tableViewer.setContentProvider(new PatientInfoTableViewerContentProvider());
 		tableViewer.setLabelProvider(new PatientInfoTableViewerLabelProvider());
 		tableViewer.setInput(patientDAO.getPatientInfoList());
-//		tableViewer.setSorter(new PatientInfoSorter());
 
 		// ��ӱ༭���Ĺ������������� �޸ģ�ɾ����ˢ�� ������ť
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
 		toolBarManager.add(new AddPatientAction());
-//		toolBarManager.add(new DeletePatientAction());
-//		toolBarManager.add(new ModifyPatientAction());
-//		toolBarManager.add(new RefreshAction());
 		toolBarManager.update(true);
 		// This brings the underlying widgets up to date with any changes.
 		
