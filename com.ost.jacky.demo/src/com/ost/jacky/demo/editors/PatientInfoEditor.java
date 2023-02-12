@@ -25,6 +25,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
 import com.ost.jacky.demo.dao.PatientDAO;
+import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
 import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerContentProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerLabelProvider;
 
@@ -33,9 +34,9 @@ public class PatientInfoEditor extends EditorPart {
 
 	private PatientDAO patientDAO;
 
-	// һ��鿴�����ĸ��ؼ����ࣩ����ʾ��������Ҫ��һ����Ӧ�Ĳ鿴�����ֶ�
-	private TableViewer tableViewer;// ���鿴��
-	private boolean sort;// ��ʶ����ķ�ʽ
+	private TableViewer tableViewer;
+	
+	private boolean sort;
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -46,7 +47,6 @@ public class PatientInfoEditor extends EditorPart {
 	}
 
 	@Override
-	// �������Ҫ�޸ģ���д��
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		this.setSite(site);
 		this.setInput(input);
@@ -63,9 +63,9 @@ public class PatientInfoEditor extends EditorPart {
 	}
 
 	@Override
-	// ��������������ñ༭����Ҫ��ʾ������
 	public void createPartControl(Composite parent) {
-		// ���ȳ�ʼ��һ��PatientDAO
+		FileEditorInput fileEditorInput = (FileEditorInput)this.getEditorInput();
+		System.out.println("createPartControl fileName" + fileEditorInput.getFileName());
 		patientDAO = new PatientDAO();
 
 		// ���ȴ���һ��ViewForm�����������ڿؼ��Ĳ���

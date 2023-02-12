@@ -35,6 +35,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
 import com.ost.jacky.demo.editors.editorInput.PatientInfoEditorInput;
 import com.ost.jacky.demo.navigator.NavigatorEntityElement;
 import com.ost.jacky.demo.navigator.NavigatorEntityFactory;
@@ -84,34 +85,34 @@ public class View extends ViewPart {
 	        Object object = ((IStructuredSelection) selection).getFirstElement();
 	        System.out.println(object);
 	        // 再将对象转为实际的树节点对象
-	        NavigatorEntityElement element = (NavigatorEntityElement) object;
+	        File element = (File) object;
 //	        // 得到该对象的editorInput
 //	        IEditorInput editorInput = element.getEditorInput();
+	        FileEditorInput fileEditorInput = new FileEditorInput();
+	        fileEditorInput.setFile(element);
+	        fileEditorInput.setFileName(element.getAbsolutePath());
 //	        // 得到当前工作台的page
-//	        IWorkbenchPage workbenchPage = getViewSite().getPage();
-//	        String editorID = null;
+	        IWorkbenchPage workbenchPage = getViewSite().getPage();
+	        String editorID = null;
 	        // 这里要结合NavigatorEntityFactory类的setNavigatorEntity方法
 	        // 这一部分对原书作了修改，化繁为简
 //	        if (element.getName().equals("Patient Information")) {// 病人信息管理
-//	          editorID = PluginUtil.PatientInfoEditor_ID;
+	         editorID = PluginUtil.PatientInfoEditor_ID;
 //	        }else{
 //	          System.out.println("View hookDoubleClickAction editorID is null=====");
 //	          return;
 //	        }
-//	        System.out.println("View hookDoubleClickAction editorID is =====" + editorID);
-//	        PatientInfoEditorInput in = (PatientInfoEditorInput)editorInput;
-//	        in.setValue("dsfsdafdsfdsf");
-//	        //IEditorPart:An editor is a visual component within a workbench page.
-//	        IEditorPart editorPart = workbenchPage.findEditor(in);
-//	        if(editorPart != null){//已经打开了所需的编辑器
-//	          workbenchPage.bringToTop(editorPart);
-//	        }else {//没有打开就打开来
-//	          try {
-//	            editorPart = workbenchPage.openEditor(editorInput, editorID);
-//	          } catch (Exception e) {
-//	            e.printStackTrace();
-//	          }
-//	        }
+	        //IEditorPart:An editor is a visual component within a workbench page.
+	        IEditorPart editorPart = workbenchPage.findEditor(fileEditorInput);
+	        if(editorPart != null){//已经打开了所需的编辑器
+	          workbenchPage.bringToTop(editorPart);
+	        }else {//没有打开就打开来
+	          try {
+	            editorPart = workbenchPage.openEditor(fileEditorInput, editorID);
+	          } catch (Exception e) {
+	            e.printStackTrace();
+	          }
+	        }
 	      }
 	    });
 	  }
