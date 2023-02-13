@@ -11,5 +11,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.equinox.event
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: com.ost.jacky.demo
-Import-Package: javax.inject
+Import-Package: com.yinger.patientims.views.viewerProvider,
+ javax.inject
 Bundle-ActivationPolicy: lazy

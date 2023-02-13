@@ -93,12 +93,9 @@ public class View extends ViewPart {
 	        if (!element.getName().endsWith("ser")) {
 	        	return;
 	        }
-//	        // 得到该对象的editorInput
-//	        IEditorInput editorInput = element.getEditorInput();
 	        FileEditorInput fileEditorInput = new FileEditorInput();
 	        fileEditorInput.setFile(element);
 	        fileEditorInput.setFileName(element.getAbsolutePath());
-//	        // 得到当前工作台的page
 	        IWorkbenchPage workbenchPage = getViewSite().getPage();
 	        String editorID = null;
 	        // 其实这边是指定的类路径，要与viewer里面的ID，进行区分开来

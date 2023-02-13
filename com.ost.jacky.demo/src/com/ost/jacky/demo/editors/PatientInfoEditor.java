@@ -29,15 +29,12 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
-import com.ost.jacky.demo.dao.PatientDAO;
 import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
-import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerContentProvider;
-import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerLabelProvider;
+import com.yinger.patientims.views.viewerProvider.PatientInfoTableViewerContentProvider;
+import com.yinger.patientims.views.viewerProvider.PatientInfoTableViewerLabelProvider;
 
 
 public class PatientInfoEditor extends EditorPart {
-
-	private PatientDAO patientDAO;
 
 	private TableViewer tableViewer;
 	
@@ -71,7 +68,6 @@ public class PatientInfoEditor extends EditorPart {
 	public void createPartControl(Composite parent) {
 		FileEditorInput fileEditorInput = (FileEditorInput)this.getEditorInput();
 		System.out.println("createPartControl fileName: " + fileEditorInput.getFileName());
-		patientDAO = new PatientDAO();
 		ViewForm viewForm = new ViewForm(parent, SWT.NONE);
 		viewForm.setLayout(new FillLayout());
 		createTableViewer(viewForm);
@@ -91,7 +87,7 @@ public class PatientInfoEditor extends EditorPart {
 		tableViewer.setInput(fileList);
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
-		toolBarManager.add(new AddPatientAction());
+		toolBarManager.add(new AddPatientAction(this));
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
@@ -113,12 +109,26 @@ public class PatientInfoEditor extends EditorPart {
 	}
 	
 	class AddPatientAction extends Action {
-		public AddPatientAction() {
+		private PatientInfoEditor editor;
+		
+		public AddPatientAction(PatientInfoEditor editor) {
 			this.setToolTipText("Add Patient Information");
 		}
 		public void run() {
 			System.out.println("AddPatientAction work");
-			tableViewer.setInput(patientDAO.getPatientInfoList());
+			FileEditorInput fileEditorInput = (FileEditorInput)editor.getEditorInput();
+			List<String> fileList = new ArrayList<String>();
+			try {
+				FileInputStream fileInput = new FileInputStream(fileEditorInput.getFileName());
+				ObjectInputStream in = new ObjectInputStream(fileInput);
+				Map map = (HashMap) in.readObject();
+				for (Object k: map.keySet()) {
+					fileList.add(k.toString());
+				}
+			} catch (Exception ex) {
+				
+			}
+			tableViewer.setInput(fileList);
 			tableViewer.refresh();
 		}
 	}
