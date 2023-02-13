@@ -2,15 +2,19 @@ package com.ost.jacky.demo.editors;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -28,10 +32,13 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
-import com.yinger.patientims.views.viewerProvider.PatientInfoTableViewerContentProvider;
-import com.yinger.patientims.views.viewerProvider.PatientInfoTableViewerLabelProvider;
+import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerContentProvider;
+import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerLabelProvider;
+import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 
 
 public class PatientInfoEditor extends EditorPart {
@@ -87,7 +94,7 @@ public class PatientInfoEditor extends EditorPart {
 		tableViewer.setInput(fileList);
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
-		toolBarManager.add(new AddPatientAction(this));
+		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName()));
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
@@ -131,6 +138,37 @@ public class PatientInfoEditor extends EditorPart {
 			tableViewer.setInput(fileList);
 			tableViewer.refresh();
 		}
+	}
+	
+
+	
+	class DeletePatientAction extends Action {
+		
+		private String fileName;
+
+	    private ImageDescriptor createImageDescriptor() {
+	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+	        URL url = FileLocator.find(bundle, new Path("/icons/small/delete.gif"), null);
+	        return ImageDescriptor.createFromURL(url);
+	    }
+		
+		public DeletePatientAction(String fileName) {
+			this.setToolTipText("Delete File Name");
+			this.setImageDescriptor(createImageDescriptor());
+			this.fileName = fileName;
+		}
+
+		public void run() {
+			IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
+			String fileName = (String) selection.getFirstElement();
+			if (fileName == null) {
+				return;
+			}
+			if (MessageDialog.openConfirm(null, "Confirm to delete", "Are you sure to delete?")) {
+				tableViewer.remove(fileName);
+			}
+		}
+
 	}
 	
 }

@@ -4,7 +4,6 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.ost.jacky.demo.model.Patient;
 
 public class PatientInfoTableViewerLabelProvider implements ITableLabelProvider{
 	  @Override
