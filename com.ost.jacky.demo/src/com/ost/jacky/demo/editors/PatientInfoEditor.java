@@ -1,7 +1,11 @@
 package com.ost.jacky.demo.editors;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -66,7 +70,7 @@ public class PatientInfoEditor extends EditorPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		FileEditorInput fileEditorInput = (FileEditorInput)this.getEditorInput();
-		System.out.println("createPartControl fileName" + fileEditorInput.getFileName());
+		System.out.println("createPartControl fileName: " + fileEditorInput.getFileName());
 		patientDAO = new PatientDAO();
 		ViewForm viewForm = new ViewForm(parent, SWT.NONE);
 		viewForm.setLayout(new FillLayout());
@@ -74,8 +78,16 @@ public class PatientInfoEditor extends EditorPart {
 		tableViewer.setContentProvider(new PatientInfoTableViewerContentProvider());
 		tableViewer.setLabelProvider(new PatientInfoTableViewerLabelProvider());
 		List<String> fileList = new ArrayList<String>();
-		fileList.add("dsffdfsfadfdfdsfdljk");
-		fileList.add("ddssssfdfsfdsfdsfdsdsffdfsfadfdfdsfdljk");
+		try {
+			FileInputStream fileInput = new FileInputStream(fileEditorInput.getFileName());
+			ObjectInputStream in = new ObjectInputStream(fileInput);
+			Map map = (HashMap) in.readObject();
+			for (Object k: map.keySet()) {
+				fileList.add(k.toString());
+			}
+		} catch (Exception ex) {
+			
+		}
 		tableViewer.setInput(fileList);
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
@@ -90,7 +102,7 @@ public class PatientInfoEditor extends EditorPart {
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		TableColumn tc1 = new TableColumn(table, SWT.CENTER);
+		TableColumn tc1 = new TableColumn(table, SWT.LEFT);
 		tc1.setText("Name");
 		tc1.setWidth(1000);
 		tc1.setResizable(true);

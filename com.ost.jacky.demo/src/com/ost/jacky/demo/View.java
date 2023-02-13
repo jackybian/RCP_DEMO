@@ -83,9 +83,16 @@ public class View extends ViewPart {
 	        ISelection selection = treeViewer.getSelection();
 	        // 得到选中的项，注意方法是将得到的选项转换成 IStructuredSelection，再调用 getFirstElement 方法
 	        Object object = ((IStructuredSelection) selection).getFirstElement();
-	        System.out.println(object);
+	        
 	        // 再将对象转为实际的树节点对象
 	        File element = (File) object;
+	        if(element.isDirectory()) {
+	        	return;
+	        }
+	        System.out.println(element.getName());
+	        if (!element.getName().endsWith("ser")) {
+	        	return;
+	        }
 //	        // 得到该对象的editorInput
 //	        IEditorInput editorInput = element.getEditorInput();
 	        FileEditorInput fileEditorInput = new FileEditorInput();
