@@ -39,6 +39,7 @@ import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
 import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerContentProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerLabelProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
+import com.ost.jacky.demo.wizards.DeleteFileWizard;
 
 
 public class PatientInfoEditor extends EditorPart {
@@ -159,14 +160,18 @@ public class PatientInfoEditor extends EditorPart {
 		}
 
 		public void run() {
-			IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
-			String fileName = (String) selection.getFirstElement();
-			if (fileName == null) {
-				return;
-			}
-			if (MessageDialog.openConfirm(null, "Confirm to delete", "Are you sure to delete?")) {
-				tableViewer.remove(fileName);
-			}
+//			IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
+//			String fileName = (String) selection.getFirstElement();
+//			if (fileName == null) {
+//				return;
+//			}
+//			if (MessageDialog.openConfirm(null, "Confirm to delete", "Are you sure to delete?")) {
+//				tableViewer.remove(fileName);
+//			}
+			DeleteFileWizard wizard = new DeleteFileWizard();
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
+			dialog.setPageSize(-1, 150);//ע�⣺�߶�Ҫ�㹻�Ĵ�
+			dialog.open();
 		}
 
 	}
