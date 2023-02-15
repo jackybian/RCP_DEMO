@@ -36,6 +36,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
+import com.ost.jacky.demo.util.QueryCondition;
 import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerContentProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerLabelProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
@@ -46,7 +47,23 @@ public class PatientInfoEditor extends EditorPart {
 
 	private TableViewer tableViewer;
 	
+	private List<String> list;
+	
+	public List<String> getList() {
+		return list;
+	}
+
+	public void setList(List<String> list) {
+		this.list = list;
+	}
+
+
+
 	private boolean sort;
+	
+	public TableViewer getViewer() {
+		return tableViewer;
+	}
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -81,21 +98,21 @@ public class PatientInfoEditor extends EditorPart {
 		createTableViewer(viewForm);
 		tableViewer.setContentProvider(new PatientInfoTableViewerContentProvider());
 		tableViewer.setLabelProvider(new PatientInfoTableViewerLabelProvider());
-		List<String> fileList = new ArrayList<String>();
+		list = new ArrayList<String>();
 		try {
 			FileInputStream fileInput = new FileInputStream(fileEditorInput.getFileName());
 			ObjectInputStream in = new ObjectInputStream(fileInput);
 			Map map = (HashMap) in.readObject();
 			for (Object k: map.keySet()) {
-				fileList.add(k.toString());
+				list.add(k.toString());
 			}
 		} catch (Exception ex) {
 			
 		}
-		tableViewer.setInput(fileList);
+		tableViewer.setInput(list);
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
-		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName()));
+		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName(), list));
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
@@ -116,36 +133,14 @@ public class PatientInfoEditor extends EditorPart {
 	public void setFocus() {
 	}
 	
-	class AddPatientAction extends Action {
-		private PatientInfoEditor editor;
-		
-		public AddPatientAction(PatientInfoEditor editor) {
-			this.setToolTipText("Add Patient Information");
-		}
-		public void run() {
-			System.out.println("AddPatientAction work");
-			FileEditorInput fileEditorInput = (FileEditorInput)editor.getEditorInput();
-			List<String> fileList = new ArrayList<String>();
-			try {
-				FileInputStream fileInput = new FileInputStream(fileEditorInput.getFileName());
-				ObjectInputStream in = new ObjectInputStream(fileInput);
-				Map map = (HashMap) in.readObject();
-				for (Object k: map.keySet()) {
-					fileList.add(k.toString());
-				}
-			} catch (Exception ex) {
-				
-			}
-			tableViewer.setInput(fileList);
-			tableViewer.refresh();
-		}
-	}
-	
-
-	
 	class DeletePatientAction extends Action {
 		
+		
 		private String fileName;
+		
+		private List<String> list;
+		
+		private QueryCondition queryCondition ;
 
 	    private ImageDescriptor createImageDescriptor() {
 	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
@@ -153,25 +148,21 @@ public class PatientInfoEditor extends EditorPart {
 	        return ImageDescriptor.createFromURL(url);
 	    }
 		
-		public DeletePatientAction(String fileName) {
+		public DeletePatientAction(String fileName,List<String> list) {
 			this.setToolTipText("Delete File Name");
 			this.setImageDescriptor(createImageDescriptor());
 			this.fileName = fileName;
+			this.list = list;
 		}
 
 		public void run() {
-//			IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
-//			String fileName = (String) selection.getFirstElement();
-//			if (fileName == null) {
-//				return;
-//			}
-//			if (MessageDialog.openConfirm(null, "Confirm to delete", "Are you sure to delete?")) {
-//				tableViewer.remove(fileName);
-//			}
 			DeleteFileWizard wizard = new DeleteFileWizard();
+			wizard.setList(list);
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
-			dialog.setPageSize(-1, 150);//ע�⣺�߶�Ҫ�㹻�Ĵ�
+			dialog.setPageSize(-1, 150);
 			dialog.open();
+			tableViewer.setInput(wizard.getList());
+			tableViewer.refresh();
 		}
 
 	}
