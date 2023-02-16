@@ -159,7 +159,7 @@ public class PatientInfoEditor extends EditorPart {
 			DeleteFileWizard wizard = new DeleteFileWizard();
 			wizard.setList(list);
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
-			dialog.setPageSize(-1, 150);
+			dialog.setPageSize(1024, 768);
 			dialog.open();
 			tableViewer.setInput(wizard.getList());
 			tableViewer.refresh();

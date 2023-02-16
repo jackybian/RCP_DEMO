@@ -17,7 +17,9 @@ import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 
 public class DeleteFileWizard extends Wizard{
 	
-	private DeleteFileWizardPage deleteFileWizardPage;
+	private DeleteFilePreQueryWizardPage deleteFileWizardPage;
+	private DeleteFileContainsQueryWizardPage deleteFileContainsQueryWizardPage;
+	private DeleteFilePostQueryWizardPage deleteFilePostQueryWizardPage;
 	
 	private QueryCondition queryCondition ;
 	
@@ -51,15 +53,21 @@ public class DeleteFileWizard extends Wizard{
 		getShell().setImage(new Image(null, createImageDescriptor("/icons/small/add.gif").getImageData()));
 		getShell().setText("Delete File");
 		queryCondition = new QueryCondition();
-		deleteFileWizardPage = new DeleteFileWizardPage(queryCondition);
+		deleteFileWizardPage = new DeleteFilePreQueryWizardPage(queryCondition);
+		deleteFileContainsQueryWizardPage = new DeleteFileContainsQueryWizardPage(queryCondition);
+		deleteFilePostQueryWizardPage = new DeleteFilePostQueryWizardPage(queryCondition);
 		addPage(deleteFileWizardPage);
+		addPage(deleteFileContainsQueryWizardPage);
+		addPage(deleteFilePostQueryWizardPage);
 	}
 
 	@Override
 	public boolean performFinish() {
 		System.out.println("performFinish");
 		System.out.println(queryCondition.getPreConditions());
+		System.out.println("================================");
 		System.out.println(queryCondition.getContainConditions());
+		System.out.println("================================");
 		System.out.println(queryCondition.getPostConditions());
 		list.clear();
 		list.add("1");
