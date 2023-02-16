@@ -22,11 +22,10 @@ public class DeleteFileWizardPage extends WizardPage implements ModifyListener{
 	private Text textAge;
 	private Text textPhone;
 	private String type;
-	private PatientInfoEditor editor;
 	private QueryCondition queryCondition;
-	public DeleteFileWizardPage(PatientInfoEditor editor, QueryCondition queryCondition) {
-		super("PatientBasicInfoWizardPage");
-		setTitle("Add Patient Information");
+	public DeleteFileWizardPage(QueryCondition queryCondition) {
+		super("");
+		setTitle("Delete File Wizard");
 		setMessage("Attention:Please input the following information!", IMessageProvider.INFORMATION);
 		this.queryCondition = queryCondition;
 	}
@@ -46,21 +45,21 @@ public class DeleteFileWizardPage extends WizardPage implements ModifyListener{
 		textName.setBounds(10, 8, 325, 210);
 		textName.addModifyListener(this);
 
-
 		new Label(composite, SWT.NONE).setText("后置匹配");
 		textAge = new Text(composite, SWT.MULTI);
 		textAge.setLayoutData(gridData);
+		textAge.setBounds(10, 8, 325, 210);
 		textAge.addModifyListener(this);
 
 		new Label(composite, SWT.NONE).setText("包含");
 		textPhone = new Text(composite, SWT.MULTI);
 		textPhone.setLayoutData(gridData);
+		textPhone.setBounds(10, 8, 325, 210);
 		textPhone.addModifyListener(this);
 		setControl(composite);		
 		setPageComplete(false);
 	}
 	public void modifyText(ModifyEvent e) {
-		//setMessage(null);
 		queryCondition.setPreConditions(textName.getText());
 		queryCondition.setPostConditions(textAge.getText());
 		queryCondition.setContainConditions(textPhone.getText());

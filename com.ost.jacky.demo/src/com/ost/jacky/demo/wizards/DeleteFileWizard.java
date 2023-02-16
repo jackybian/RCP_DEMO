@@ -17,8 +17,6 @@ import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 
 public class DeleteFileWizard extends Wizard{
 	
-	private PatientInfoEditor editor;
-	
 	private DeleteFileWizardPage deleteFileWizardPage;
 	
 	private QueryCondition queryCondition ;
@@ -31,15 +29,9 @@ public class DeleteFileWizard extends Wizard{
         return ImageDescriptor.createFromURL(url);
     }
 	
-    public void setEditor(PatientInfoEditor editor) {
-    	this.editor = editor;
-    }
-    
 	public QueryCondition getQueryCondition() {
 		return queryCondition;
 	}
-
-	
 	
 	public List<String> getList() {
 		return list;
@@ -59,17 +51,17 @@ public class DeleteFileWizard extends Wizard{
 		getShell().setImage(new Image(null, createImageDescriptor("/icons/small/add.gif").getImageData()));
 		getShell().setText("Delete File");
 		queryCondition = new QueryCondition();
-		deleteFileWizardPage = new DeleteFileWizardPage(editor, queryCondition);
+		deleteFileWizardPage = new DeleteFileWizardPage(queryCondition);
 		addPage(deleteFileWizardPage);
 	}
 
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
 		System.out.println("performFinish");
 		System.out.println(queryCondition.getPreConditions());
 		System.out.println(queryCondition.getContainConditions());
 		System.out.println(queryCondition.getPostConditions());
+		list.clear();
 		list.add("1");
 		list.add("2");
 		list.add("3");
