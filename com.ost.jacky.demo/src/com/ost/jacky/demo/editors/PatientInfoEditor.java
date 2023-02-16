@@ -24,7 +24,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
@@ -113,6 +115,7 @@ public class PatientInfoEditor extends EditorPart {
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
 		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName(), list));
+		toolBarManager.add(new SaveAction(fileEditorInput.getFileName(), list));
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
@@ -163,6 +166,35 @@ public class PatientInfoEditor extends EditorPart {
 			dialog.open();
 			tableViewer.setInput(wizard.getList());
 			tableViewer.refresh();
+		}
+
+	}
+	
+	class SaveAction extends Action {
+		
+		private String fileName;
+		
+		private List<String> list;
+		
+		private QueryCondition queryCondition ;
+
+	    private ImageDescriptor createImageDescriptor() {
+	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+	        URL url = FileLocator.find(bundle, new Path("/icons/small/save.ico"), null);
+	        return ImageDescriptor.createFromURL(url);
+	    }
+		
+		public SaveAction(String fileName, List<String> list) {
+			this.setToolTipText("Delete File Name");
+			this.setImageDescriptor(createImageDescriptor());
+			this.fileName = fileName;
+			this.list = list;
+		}
+
+		public void run() {
+			FileDialog  dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
+			String selectedDir = dialog.open();
+			System.out.println("选择文件夹：" + selectedDir);
 		}
 
 	}
