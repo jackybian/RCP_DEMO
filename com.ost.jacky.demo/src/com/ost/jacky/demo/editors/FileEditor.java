@@ -229,7 +229,7 @@ public class FileEditor extends EditorPart {
 			searchList = new ArrayList<String>();
 			SearchFileWizard wizard = new SearchFileWizard(searchList);
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
-			dialog.setPageSize(200, 200);
+			dialog.setPageSize(100, 100);
 			dialog.open();
 			System.out.println("searchList size = " + searchList.size() );
 			if (searchList.size()>0) {

@@ -9,7 +9,9 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class SearchFileWizardPage extends WizardPage implements ModifyListener{
@@ -31,9 +33,11 @@ public class SearchFileWizardPage extends WizardPage implements ModifyListener{
 	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FillLayout());
+		composite.setLayout(new GridLayout(2, false));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		searchCondition = new Text(composite,  SWT.BORDER);
+		new Label(composite, SWT.NONE).setText("检索条件:");
+		searchCondition = new Text(composite, SWT.BORDER);
+		searchCondition.setLayoutData(gridData);
 		searchCondition.addModifyListener(this);
 		setControl(composite);		
 		setPageComplete(false);
