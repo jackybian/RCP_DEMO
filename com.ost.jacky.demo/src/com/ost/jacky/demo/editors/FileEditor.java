@@ -210,6 +210,8 @@ public class FileEditor extends EditorPart {
 		
 		private List<String> list;
 		
+		private List<String> resultList;
+		
 		private QueryCondition queryCondition ;
 
 	    private ImageDescriptor createImageDescriptor() {
@@ -233,7 +235,15 @@ public class FileEditor extends EditorPart {
 			dialog.open();
 			System.out.println("searchList size = " + searchList.size() );
 			if (searchList.size()>0) {
-				System.out.println("searchList Size：" + searchList.get(0));
+				resultList = new ArrayList<>();
+				String reg = searchList.get(searchList.size() - 1);
+				for (String value: list) {
+					if (value.contains(reg)) {
+						resultList.add(value);
+					}
+				}
+				tableViewer.setInput(resultList);
+				tableViewer.refresh();
 			}
 		}
 

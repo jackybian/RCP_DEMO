@@ -1,7 +1,11 @@
 package com.ost.jacky.demo.wizards;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -69,10 +73,29 @@ public class DeleteFileWizard extends Wizard{
 		System.out.println(queryCondition.getContainConditions());
 		System.out.println("================================");
 		System.out.println(queryCondition.getPostConditions());
+		List<String> afterPreList = new ArrayList<>();
+		String preCondition = queryCondition.getPreConditions();
+		
+		List<String> afterContainList = new ArrayList<>();
+		List<String> afterPostList = new ArrayList<>();
+		String[] postConditions = queryCondition.getPostConditions().split("\\n");
+		if (null == postConditions || postConditions.length == 0) {
+			return true;
+		}
+		Set<String> set = new HashSet<>();
+		for (String s : list) {
+			set.add(s);
+		}
+		for (int index = 0; index < postConditions.length; index++) {
+			String value = postConditions[index];
+			for (String s : list) {
+				if (s.endsWith(value)) {
+					set.remove(s);
+				}
+			}
+		}
 		list.clear();
-		list.add("1");
-		list.add("2");
-		list.add("3");
+		list.addAll(set);
 		return true;
 	}
 
