@@ -11,7 +11,7 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.ost.jacky.demo.editors.PatientInfoEditor;
+import com.ost.jacky.demo.editors.FileEditor;
 import com.ost.jacky.demo.util.QueryCondition;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 

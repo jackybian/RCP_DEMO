@@ -43,13 +43,16 @@ import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerCo
 import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerLabelProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 import com.ost.jacky.demo.wizards.DeleteFileWizard;
+import com.ost.jacky.demo.wizards.SearchFileWizard;
 
 
-public class PatientInfoEditor extends EditorPart {
+public class FileEditor extends EditorPart {
 
 	private TableViewer tableViewer;
 	
 	private List<String> list;
+	
+	private List<String> searchList;
 	
 	public List<String> getList() {
 		return list;
@@ -58,8 +61,6 @@ public class PatientInfoEditor extends EditorPart {
 	public void setList(List<String> list) {
 		this.list = list;
 	}
-
-
 
 	private boolean sort;
 	
@@ -116,6 +117,7 @@ public class PatientInfoEditor extends EditorPart {
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
 		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName(), list));
 		toolBarManager.add(new SaveAction(fileEditorInput.getFileName(), list));
+		toolBarManager.add(new SearchAction(fileEditorInput.getFileName(), list));
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
@@ -195,6 +197,44 @@ public class PatientInfoEditor extends EditorPart {
 			FileDialog  dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
 			String selectedDir = dialog.open();
 			System.out.println("选择文件夹：" + selectedDir);
+		}
+
+	}
+	
+	
+	class SearchAction extends Action {
+		
+		private String fileName;
+		
+		private List<String> searchList;
+		
+		private List<String> list;
+		
+		private QueryCondition queryCondition ;
+
+	    private ImageDescriptor createImageDescriptor() {
+	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+	        URL url = FileLocator.find(bundle, new Path("/icons/small/Search.ico"), null);
+	        return ImageDescriptor.createFromURL(url);
+	    }
+		
+		public SearchAction(String fileName, List<String> list) {
+			this.setToolTipText("Delete File Name");
+			this.setImageDescriptor(createImageDescriptor());
+			this.fileName = fileName;
+			this.list = list;
+		}
+
+		public void run() {
+			searchList = new ArrayList<String>();
+			SearchFileWizard wizard = new SearchFileWizard(searchList);
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
+			dialog.setPageSize(200, 200);
+			dialog.open();
+			System.out.println("searchList size = " + searchList.size() );
+			if (searchList.size()>0) {
+				System.out.println("searchList Size：" + searchList.get(0));
+			}
 		}
 
 	}

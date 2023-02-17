@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.ost.jacky.demo.editors.PatientInfoEditor;
+import com.ost.jacky.demo.editors.FileEditor;
 import com.ost.jacky.demo.util.QueryCondition;
 
 

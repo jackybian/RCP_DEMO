@@ -53,9 +53,9 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.ost.jacky.demo.editors.PatientInfoEditor"
+            class="com.ost.jacky.demo.editors.FileEditor"
             default="false"
-            id="com.ost.jacky.demo.editors.PatientInfoEditor"
+            id="com.ost.jacky.demo.editors.FileEditor"
             name="Patient Information Management">
       </editor>
    </extension>   
