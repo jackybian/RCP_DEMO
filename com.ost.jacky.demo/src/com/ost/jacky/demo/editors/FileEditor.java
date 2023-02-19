@@ -1,7 +1,11 @@
 package com.ost.jacky.demo.editors;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +58,8 @@ public class FileEditor extends EditorPart {
 	
 	private List<String> searchList;
 	
+	private Map map;
+	
 	public List<String> getList() {
 		return list;
 	}
@@ -102,13 +108,15 @@ public class FileEditor extends EditorPart {
 		tableViewer.setContentProvider(new PatientInfoTableViewerContentProvider());
 		tableViewer.setLabelProvider(new PatientInfoTableViewerLabelProvider());
 		list = new ArrayList<String>();
+		map = new HashMap();
 		try {
 			FileInputStream fileInput = new FileInputStream(fileEditorInput.getFileName());
 			ObjectInputStream in = new ObjectInputStream(fileInput);
-			Map map = (HashMap) in.readObject();
+			map = (HashMap) in.readObject();
 			for (Object k: map.keySet()) {
 				list.add(k.toString());
 			}
+			
 		} catch (Exception ex) {
 			
 		}
@@ -116,7 +124,7 @@ public class FileEditor extends EditorPart {
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
 		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName(), list));
-		toolBarManager.add(new SaveAction(fileEditorInput.getFileName(), list));
+		toolBarManager.add(new SaveAction(fileEditorInput.getFileName(), list, map));
 		toolBarManager.add(new SearchAction(fileEditorInput.getFileName(), list));
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
@@ -164,7 +172,7 @@ public class FileEditor extends EditorPart {
 			DeleteFileWizard wizard = new DeleteFileWizard();
 			wizard.setList(list);
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
-			dialog.setPageSize(1024, 768);
+			dialog.setPageSize(500, 400);
 			dialog.open();
 			tableViewer.setInput(wizard.getList());
 			tableViewer.refresh();
@@ -179,6 +187,8 @@ public class FileEditor extends EditorPart {
 		private List<String> list;
 		
 		private QueryCondition queryCondition ;
+		
+		private Map map;
 
 	    private ImageDescriptor createImageDescriptor() {
 	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
@@ -186,17 +196,32 @@ public class FileEditor extends EditorPart {
 	        return ImageDescriptor.createFromURL(url);
 	    }
 		
-		public SaveAction(String fileName, List<String> list) {
-			this.setToolTipText("Delete File Name");
+		public SaveAction(String fileName, List<String> list, Map map) {
+			this.setToolTipText("Save File");
 			this.setImageDescriptor(createImageDescriptor());
 			this.fileName = fileName;
 			this.list = list;
+			this.map = map;
 		}
 
 		public void run() {
 			FileDialog  dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
 			String selectedDir = dialog.open();
 			System.out.println("选择文件夹：" + selectedDir);
+			Map newMap = new HashMap();
+			for (String k: list) {
+				newMap.put(k, map.get(k));
+			}
+	        try {
+	            FileOutputStream fileOut = new FileOutputStream(selectedDir);
+	            try (ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+	                out.writeObject(newMap);
+	            }
+	        } catch (FileNotFoundException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 		}
 
 	}
@@ -249,4 +274,49 @@ public class FileEditor extends EditorPart {
 
 	}
 	
+	class RefreshAction extends Action {
+		
+		private String fileName;
+		
+		private List<String> searchList;
+		
+		private List<String> list;
+		
+		private List<String> resultList;
+		
+		private QueryCondition queryCondition ;
+
+	    private ImageDescriptor createImageDescriptor() {
+	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+	        URL url = FileLocator.find(bundle, new Path("/icons/small/Refresh.ico"), null);
+	        return ImageDescriptor.createFromURL(url);
+	    }
+		
+		public RefreshAction(String fileName, List<String> list) {
+			this.setToolTipText("Refresh File Name");
+			this.setImageDescriptor(createImageDescriptor());
+			this.fileName = fileName;
+			this.list = list;
+		}
+
+		public void run() {
+			try {
+				FileInputStream fileInput = new FileInputStream(fileName);
+				ObjectInputStream in = new ObjectInputStream(fileInput);
+				Map map = (HashMap) in.readObject();
+				if (null == list) {
+					list = new ArrayList<>();
+				}
+				list.clear();
+				for (Object k: map.keySet()) {
+					list.add(k.toString());
+				}
+			} catch (Exception ex) {
+				
+			}
+			tableViewer.setInput(list);
+			tableViewer.refresh();
+		}
+
+	}
 }

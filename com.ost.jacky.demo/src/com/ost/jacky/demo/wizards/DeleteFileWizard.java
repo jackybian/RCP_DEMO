@@ -78,13 +78,47 @@ public class DeleteFileWizard extends Wizard{
 		
 		List<String> afterContainList = new ArrayList<>();
 		List<String> afterPostList = new ArrayList<>();
-		String[] postConditions = queryCondition.getPostConditions().split("\\n");
-		if (null == postConditions || postConditions.length == 0) {
-			return true;
-		}
 		Set<String> set = new HashSet<>();
 		for (String s : list) {
 			set.add(s);
+		}
+		if (null != queryCondition.getPreConditions()) {
+		String[] preConditions = queryCondition.getPreConditions().split("\\n");
+		if (null == preConditions || preConditions.length == 0) {
+			return true;
+		}
+
+		for (int index = 0; index < preConditions.length; index++) {
+			String value = preConditions[index];
+			for (String s : list) {
+				if (s.startsWith(value)) {
+					set.remove(s);
+				}
+			}
+		}
+		}
+		
+		
+		if (null != queryCondition.getContainConditions()) {
+		String[] preConditions = queryCondition.getContainConditions().split("\\n");
+		if (null == preConditions || preConditions.length == 0) {
+			return true;
+		}
+
+		for (int index = 0; index < preConditions.length; index++) {
+			String value = preConditions[index];
+			for (String s : list) {
+				if (s.contains(value)) {
+					set.remove(s);
+				}
+			}
+		}
+		}
+		
+		if (null != queryCondition.getPostConditions()) {
+		String[] postConditions = queryCondition.getPostConditions().split("\\n");
+		if (null == postConditions || postConditions.length == 0) {
+			return true;
 		}
 		for (int index = 0; index < postConditions.length; index++) {
 			String value = postConditions[index];
@@ -94,9 +128,11 @@ public class DeleteFileWizard extends Wizard{
 				}
 			}
 		}
+		}
 		list.clear();
 		list.addAll(set);
 		return true;
+	}
 	}
 
 }
