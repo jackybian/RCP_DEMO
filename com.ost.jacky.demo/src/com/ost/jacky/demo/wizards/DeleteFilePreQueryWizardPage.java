@@ -24,7 +24,7 @@ public class DeleteFilePreQueryWizardPage extends WizardPage implements ModifyLi
 	public DeleteFilePreQueryWizardPage(QueryCondition queryCondition) {
 		super("");
 		setTitle("Delete File Wizard");
-		setMessage("Attention:Please input the following information!", IMessageProvider.INFORMATION);
+		setMessage("前缀查询，支持多行，用换行符分割", IMessageProvider.INFORMATION);
 		this.queryCondition = queryCondition;
 	}
 	protected DeleteFilePreQueryWizardPage(String pageName) {
@@ -40,18 +40,6 @@ public class DeleteFilePreQueryWizardPage extends WizardPage implements ModifyLi
 		preConditions = new Text(composite,  SWT.WRAP|SWT.V_SCROLL);
 		preConditions.setBounds(200, 300, 600, 1000);
 		preConditions.addModifyListener(this);
-
-//		new Label(composite, SWT.NONE).setText("后置匹配");
-//		textAge = new Text(composite, SWT.MULTI);
-//		textAge.setLayoutData(gridData);
-//		textAge.setBounds(10, 8, 325, 210);
-//		textAge.addModifyListener(this);
-//
-//		new Label(composite, SWT.NONE).setText("包含");
-//		textPhone = new Text(composite, SWT.MULTI);
-//		textPhone.setLayoutData(gridData);
-//		textPhone.setBounds(10, 8, 325, 210);
-//		textPhone.addModifyListener(this);
 		setControl(composite);		
 		setPageComplete(false);
 	}

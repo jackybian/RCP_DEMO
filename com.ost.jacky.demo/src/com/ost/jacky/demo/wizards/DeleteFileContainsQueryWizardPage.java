@@ -18,7 +18,7 @@ public class DeleteFileContainsQueryWizardPage extends WizardPage implements Mod
 	public DeleteFileContainsQueryWizardPage(QueryCondition queryCondition) {
 		super("");
 		setTitle("Delete File Wizard");
-		setMessage("Attention:Please input the following information!", IMessageProvider.INFORMATION);
+		setMessage("包含查询，支持多行，用换行符分割", IMessageProvider.INFORMATION);
 		this.queryCondition = queryCondition;
 	}
 

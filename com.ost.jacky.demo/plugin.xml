@@ -78,7 +78,7 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            name="RCP Application"
+            name="FlumeAdminTool"
             application="com.ost.jacky.demo.application">
          <property
                name="windowImages"
@@ -86,7 +86,7 @@
          </property>
          <property
                name="appName"
-               value="RCP Application">
+               value="FlumeAdminTool">
          </property>
       </product>
    </extension>

@@ -18,7 +18,7 @@ public class DeleteFilePostQueryWizardPage extends WizardPage implements ModifyL
 	public DeleteFilePostQueryWizardPage(QueryCondition queryCondition) {
 		super("");
 		setTitle("Delete File Wizard");
-		setMessage("Attention:Please input the following information!", IMessageProvider.INFORMATION);
+		setMessage("后缀查询，支持多行，用换行符分割", IMessageProvider.INFORMATION);
 		this.queryCondition = queryCondition;
 	}
 	
