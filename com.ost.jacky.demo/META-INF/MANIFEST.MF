@@ -8,9 +8,10 @@ Bundle-Vendor: OST
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.apache.felix.scr,
- org.eclipse.equinox.event
+ org.eclipse.equinox.event,
+ org.eclipse.osgi.services;bundle-version="3.11.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: com.ost.jacky.demo
-Import-Package: com.yinger.patientims.views.viewerProvider,
+Import-Package: 
  javax.inject
 Bundle-ActivationPolicy: lazy
