@@ -19,26 +19,26 @@ import com.ost.jacky.demo.editors.FileEditor;
 import com.ost.jacky.demo.util.QueryCondition;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 
-public class DeleteFileWizard extends Wizard{
-	
+public class DeleteFileWizard extends Wizard {
+
 	private DeleteFilePreQueryWizardPage deleteFileWizardPage;
 	private DeleteFileContainsQueryWizardPage deleteFileContainsQueryWizardPage;
 	private DeleteFilePostQueryWizardPage deleteFilePostQueryWizardPage;
-	
-	private QueryCondition queryCondition ;
-	
+
+	private QueryCondition queryCondition;
+
 	private List<String> list;
-	
-    private ImageDescriptor createImageDescriptor(String fileName) {
-        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-        URL url = FileLocator.find(bundle, new Path(fileName), null);
-        return ImageDescriptor.createFromURL(url);
-    }
-	
+
+	private ImageDescriptor createImageDescriptor(String fileName) {
+		Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+		URL url = FileLocator.find(bundle, new Path(fileName), null);
+		return ImageDescriptor.createFromURL(url);
+	}
+
 	public QueryCondition getQueryCondition() {
 		return queryCondition;
 	}
-	
+
 	public List<String> getList() {
 		return list;
 	}
@@ -75,7 +75,7 @@ public class DeleteFileWizard extends Wizard{
 		System.out.println(queryCondition.getPostConditions());
 		List<String> afterPreList = new ArrayList<>();
 		String preCondition = queryCondition.getPreConditions();
-		
+
 		List<String> afterContainList = new ArrayList<>();
 		List<String> afterPostList = new ArrayList<>();
 		Set<String> set = new HashSet<>();
@@ -83,56 +83,55 @@ public class DeleteFileWizard extends Wizard{
 			set.add(s);
 		}
 		if (null != queryCondition.getPreConditions()) {
-		String[] preConditions = queryCondition.getPreConditions().split("\\n");
-		if (null == preConditions || preConditions.length == 0) {
-			return true;
-		}
+			String[] preConditions = queryCondition.getPreConditions().split("\\n");
+			if (null == preConditions || preConditions.length == 0) {
+				return true;
+			}
 
-		for (int index = 0; index < preConditions.length; index++) {
-			String value = preConditions[index];
-			for (String s : list) {
-				if (s.startsWith(value)) {
-					set.remove(s);
+			for (int index = 0; index < preConditions.length; index++) {
+				String value = preConditions[index];
+				for (String s : list) {
+					if (s.startsWith(value)) {
+						set.remove(s);
+					}
 				}
 			}
 		}
-		}
-		
-		
+
 		if (null != queryCondition.getContainConditions()) {
-		String[] preConditions = queryCondition.getContainConditions().split("\\n");
-		if (null == preConditions || preConditions.length == 0) {
-			return true;
+			String[] preConditions = queryCondition.getContainConditions().split("\\n");
+			if (null == preConditions || preConditions.length == 0) {
+				return true;
+			}
+
+			for (int index = 0; index < preConditions.length; index++) {
+				String value = preConditions[index];
+				for (String s : list) {
+					if (s.contains(value)) {
+						set.remove(s);
+					}
+				}
+			}
 		}
 
-		for (int index = 0; index < preConditions.length; index++) {
-			String value = preConditions[index];
-			for (String s : list) {
-				if (s.contains(value)) {
-					set.remove(s);
-				}
-			}
-		}
-		}
-		
 		if (null != queryCondition.getPostConditions()) {
-		String[] postConditions = queryCondition.getPostConditions().split("\\n");
-		if (null == postConditions || postConditions.length == 0) {
-			return true;
-		}
-		for (int index = 0; index < postConditions.length; index++) {
-			String value = postConditions[index];
-			for (String s : list) {
-				if (s.endsWith(value)) {
-					set.remove(s);
+			String[] postConditions = queryCondition.getPostConditions().split("\\n");
+			if (null == postConditions || postConditions.length == 0) {
+				return true;
+			}
+			for (int index = 0; index < postConditions.length; index++) {
+				String value = postConditions[index];
+				for (String s : list) {
+					if (s.endsWith(value)) {
+						set.remove(s);
+					}
 				}
 			}
-		}
 		}
 		list.clear();
 		list.addAll(set);
 		return true;
-	}
+
 	}
 
 }

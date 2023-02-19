@@ -49,17 +49,16 @@ import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 import com.ost.jacky.demo.wizards.DeleteFileWizard;
 import com.ost.jacky.demo.wizards.SearchFileWizard;
 
-
 public class FileEditor extends EditorPart {
 
 	private TableViewer tableViewer;
-	
+
 	private List<String> list;
-	
+
 	private List<String> searchList;
-	
+
 	private Map map;
-	
+
 	public List<String> getList() {
 		return list;
 	}
@@ -69,7 +68,7 @@ public class FileEditor extends EditorPart {
 	}
 
 	private boolean sort;
-	
+
 	public TableViewer getViewer() {
 		return tableViewer;
 	}
@@ -100,7 +99,7 @@ public class FileEditor extends EditorPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		FileEditorInput fileEditorInput = (FileEditorInput)this.getEditorInput();
+		FileEditorInput fileEditorInput = (FileEditorInput) this.getEditorInput();
 		System.out.println("createPartControl fileName: " + fileEditorInput.getFileName());
 		ViewForm viewForm = new ViewForm(parent, SWT.NONE);
 		viewForm.setLayout(new FillLayout());
@@ -113,12 +112,12 @@ public class FileEditor extends EditorPart {
 			FileInputStream fileInput = new FileInputStream(fileEditorInput.getFileName());
 			ObjectInputStream in = new ObjectInputStream(fileInput);
 			map = (HashMap) in.readObject();
-			for (Object k: map.keySet()) {
+			for (Object k : map.keySet()) {
 				list.add(k.toString());
 			}
-			
+
 		} catch (Exception ex) {
-			
+
 		}
 		tableViewer.setInput(list);
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
@@ -126,6 +125,7 @@ public class FileEditor extends EditorPart {
 		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName(), list));
 		toolBarManager.add(new SaveAction(fileEditorInput.getFileName(), list, map));
 		toolBarManager.add(new SearchAction(fileEditorInput.getFileName(), list));
+		toolBarManager.add(new RefreshAction(fileEditorInput.getFileName(), list));
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
@@ -145,23 +145,22 @@ public class FileEditor extends EditorPart {
 	@Override
 	public void setFocus() {
 	}
-	
-	class DeletePatientAction extends Action {
-		
-		
-		private String fileName;
-		
-		private List<String> list;
-		
-		private QueryCondition queryCondition ;
 
-	    private ImageDescriptor createImageDescriptor() {
-	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-	        URL url = FileLocator.find(bundle, new Path("/icons/small/delete.gif"), null);
-	        return ImageDescriptor.createFromURL(url);
-	    }
-		
-		public DeletePatientAction(String fileName,List<String> list) {
+	class DeletePatientAction extends Action {
+
+		private String fileName;
+
+		private List<String> list;
+
+		private QueryCondition queryCondition;
+
+		private ImageDescriptor createImageDescriptor() {
+			Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+			URL url = FileLocator.find(bundle, new Path("/icons/small/delete.gif"), null);
+			return ImageDescriptor.createFromURL(url);
+		}
+
+		public DeletePatientAction(String fileName, List<String> list) {
 			this.setToolTipText("Delete File Name");
 			this.setImageDescriptor(createImageDescriptor());
 			this.fileName = fileName;
@@ -179,23 +178,23 @@ public class FileEditor extends EditorPart {
 		}
 
 	}
-	
+
 	class SaveAction extends Action {
-		
+
 		private String fileName;
-		
+
 		private List<String> list;
-		
-		private QueryCondition queryCondition ;
-		
+
+		private QueryCondition queryCondition;
+
 		private Map map;
 
-	    private ImageDescriptor createImageDescriptor() {
-	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-	        URL url = FileLocator.find(bundle, new Path("/icons/small/save.ico"), null);
-	        return ImageDescriptor.createFromURL(url);
-	    }
-		
+		private ImageDescriptor createImageDescriptor() {
+			Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+			URL url = FileLocator.find(bundle, new Path("/icons/small/save.ico"), null);
+			return ImageDescriptor.createFromURL(url);
+		}
+
 		public SaveAction(String fileName, List<String> list, Map map) {
 			this.setToolTipText("Save File");
 			this.setImageDescriptor(createImageDescriptor());
@@ -205,46 +204,45 @@ public class FileEditor extends EditorPart {
 		}
 
 		public void run() {
-			FileDialog  dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
+			FileDialog dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
 			String selectedDir = dialog.open();
 			System.out.println("选择文件夹：" + selectedDir);
 			Map newMap = new HashMap();
-			for (String k: list) {
+			for (String k : list) {
 				newMap.put(k, map.get(k));
 			}
-	        try {
-	            FileOutputStream fileOut = new FileOutputStream(selectedDir);
-	            try (ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-	                out.writeObject(newMap);
-	            }
-	        } catch (FileNotFoundException e) {
-	            e.printStackTrace();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+			try {
+				FileOutputStream fileOut = new FileOutputStream(selectedDir);
+				try (ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+					out.writeObject(newMap);
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
-	
-	
-	class SearchAction extends Action {
-		
-		private String fileName;
-		
-		private List<String> searchList;
-		
-		private List<String> list;
-		
-		private List<String> resultList;
-		
-		private QueryCondition queryCondition ;
 
-	    private ImageDescriptor createImageDescriptor() {
-	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-	        URL url = FileLocator.find(bundle, new Path("/icons/small/Search.ico"), null);
-	        return ImageDescriptor.createFromURL(url);
-	    }
-		
+	class SearchAction extends Action {
+
+		private String fileName;
+
+		private List<String> searchList;
+
+		private List<String> list;
+
+		private List<String> resultList;
+
+		private QueryCondition queryCondition;
+
+		private ImageDescriptor createImageDescriptor() {
+			Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+			URL url = FileLocator.find(bundle, new Path("/icons/small/Search.ico"), null);
+			return ImageDescriptor.createFromURL(url);
+		}
+
 		public SearchAction(String fileName, List<String> list) {
 			this.setToolTipText("Delete File Name");
 			this.setImageDescriptor(createImageDescriptor());
@@ -258,11 +256,11 @@ public class FileEditor extends EditorPart {
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
 			dialog.setPageSize(100, 100);
 			dialog.open();
-			System.out.println("searchList size = " + searchList.size() );
-			if (searchList.size()>0) {
+			System.out.println("searchList size = " + searchList.size());
+			if (searchList.size() > 0) {
 				resultList = new ArrayList<>();
 				String reg = searchList.get(searchList.size() - 1);
-				for (String value: list) {
+				for (String value : list) {
 					if (value.contains(reg)) {
 						resultList.add(value);
 					}
@@ -273,25 +271,25 @@ public class FileEditor extends EditorPart {
 		}
 
 	}
-	
-	class RefreshAction extends Action {
-		
-		private String fileName;
-		
-		private List<String> searchList;
-		
-		private List<String> list;
-		
-		private List<String> resultList;
-		
-		private QueryCondition queryCondition ;
 
-	    private ImageDescriptor createImageDescriptor() {
-	        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-	        URL url = FileLocator.find(bundle, new Path("/icons/small/Refresh.ico"), null);
-	        return ImageDescriptor.createFromURL(url);
-	    }
-		
+	class RefreshAction extends Action {
+
+		private String fileName;
+
+		private List<String> searchList;
+
+		private List<String> list;
+
+		private List<String> resultList;
+
+		private QueryCondition queryCondition;
+
+		private ImageDescriptor createImageDescriptor() {
+			Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+			URL url = FileLocator.find(bundle, new Path("/icons/small/Refresh.ico"), null);
+			return ImageDescriptor.createFromURL(url);
+		}
+
 		public RefreshAction(String fileName, List<String> list) {
 			this.setToolTipText("Refresh File Name");
 			this.setImageDescriptor(createImageDescriptor());
@@ -308,11 +306,11 @@ public class FileEditor extends EditorPart {
 					list = new ArrayList<>();
 				}
 				list.clear();
-				for (Object k: map.keySet()) {
+				for (Object k : map.keySet()) {
 					list.add(k.toString());
 				}
 			} catch (Exception ex) {
-				
+
 			}
 			tableViewer.setInput(list);
 			tableViewer.refresh();
