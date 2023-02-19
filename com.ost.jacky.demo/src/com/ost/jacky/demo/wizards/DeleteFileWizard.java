@@ -73,11 +73,6 @@ public class DeleteFileWizard extends Wizard {
 		System.out.println(queryCondition.getContainConditions());
 		System.out.println("================================");
 		System.out.println(queryCondition.getPostConditions());
-		List<String> afterPreList = new ArrayList<>();
-		String preCondition = queryCondition.getPreConditions();
-
-		List<String> afterContainList = new ArrayList<>();
-		List<String> afterPostList = new ArrayList<>();
 		Set<String> set = new HashSet<>();
 		for (String s : list) {
 			set.add(s);
