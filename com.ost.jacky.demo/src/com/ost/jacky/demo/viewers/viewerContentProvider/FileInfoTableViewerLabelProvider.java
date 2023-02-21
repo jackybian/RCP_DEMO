@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 
-public class PatientInfoTableViewerLabelProvider implements ITableLabelProvider{
+public class FileInfoTableViewerLabelProvider implements ITableLabelProvider{
 	  @Override
 	  public void addListener(ILabelProviderListener listener) {
 	  }

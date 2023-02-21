@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-public class PatientInfoTableViewerContentProvider implements IStructuredContentProvider{
+public class FileInfoTableViewerContentProvider implements IStructuredContentProvider{
 	@Override
 	public Object[] getElements(Object inputElement) {
 		return ((List)inputElement).toArray();

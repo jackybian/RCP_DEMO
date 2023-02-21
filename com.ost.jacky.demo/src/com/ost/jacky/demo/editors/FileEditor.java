@@ -43,8 +43,8 @@ import org.osgi.framework.FrameworkUtil;
 
 import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
 import com.ost.jacky.demo.util.QueryCondition;
-import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerContentProvider;
-import com.ost.jacky.demo.viewers.viewerContentProvider.PatientInfoTableViewerLabelProvider;
+import com.ost.jacky.demo.viewers.viewerContentProvider.FileInfoTableViewerContentProvider;
+import com.ost.jacky.demo.viewers.viewerContentProvider.FileInfoTableViewerLabelProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 import com.ost.jacky.demo.wizards.DeleteFileWizard;
 import com.ost.jacky.demo.wizards.SearchFileWizard;
@@ -104,8 +104,8 @@ public class FileEditor extends EditorPart {
 		ViewForm viewForm = new ViewForm(parent, SWT.NONE);
 		viewForm.setLayout(new FillLayout());
 		createTableViewer(viewForm);
-		tableViewer.setContentProvider(new PatientInfoTableViewerContentProvider());
-		tableViewer.setLabelProvider(new PatientInfoTableViewerLabelProvider());
+		tableViewer.setContentProvider(new FileInfoTableViewerContentProvider());
+		tableViewer.setLabelProvider(new FileInfoTableViewerLabelProvider());
 		list = new ArrayList<String>();
 		map = new HashMap();
 		try {
