@@ -2,54 +2,32 @@ package com.ost.jacky.demo;
 
 import java.io.File;
 import java.net.URL;
-import java.util.*;
-
-import javax.inject.Inject;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
-import com.ost.jacky.demo.editors.editorInput.PatientInfoEditorInput;
-import com.ost.jacky.demo.navigator.NavigatorEntityElement;
-import com.ost.jacky.demo.navigator.NavigatorEntityFactory;
 import com.ost.jacky.demo.util.PluginUtil;
-import com.ost.jacky.demo.viewers.viewerContentProvider.NavigatorTreeViewerContentProvider;
-import com.ost.jacky.demo.viewers.viewerContentProvider.NavigatorTreeViewerLabelProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewContentProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 
 public class View extends ViewPart {
 	public static final String ID = "com.ost.jacky.demo.view";
 
-	@Inject 
-	private IWorkbench workbench;
 	
 	private TreeViewer treeViewer;
 
@@ -114,23 +92,6 @@ public class View extends ViewPart {
 	    });
 	  }
 	
-	  private void setViewToolBar() {
-		    // IActionBars:Used by a part to access its menu, toolbar, and
-		    // status line managers.
-		    IActionBars bars = getViewSite().getActionBars();
-		    // 定义工具栏
-		    IToolBarManager toolBarManager = bars.getToolBarManager();
-		    // 定义下拉菜单栏
-		    IMenuManager menuManager = bars.getMenuManager();
-		    // DrillDownAdapter:Implements a simple web style navigation
-		    // metaphor for a TreeViewer. Home, back,
-		    // and "drill into" functions are supported for the viewer,
-		    DrillDownAdapter drillDownAdapter = new DrillDownAdapter(treeViewer);
-		    // 为工具栏添加“goHome”，“goBack”，“goInto”操作
-		    drillDownAdapter.addNavigationActions(menuManager);
-		    // 为菜单栏添加“goHome”，“goBack”，“goInto”操作
-		    drillDownAdapter.addNavigationActions(toolBarManager);
-		  }
 	
 	@Override
 	public void setFocus() {
