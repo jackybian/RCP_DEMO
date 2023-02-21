@@ -13,6 +13,8 @@ public class Perspective implements IPerspectiveFactory {
 	public void createInitialLayout(IPageLayout layout) {
 		String editorArea = layout.getEditorArea();
 		layout.addView(PluginUtil.NavigatorView_ID, IPageLayout.LEFT, 0.3f, editorArea);
+		IFolderLayout rightBottom = layout.createFolder("rightbottom", IPageLayout.BOTTOM, 0.7f, editorArea);
+		rightBottom.addView(PluginUtil.MayDelFileList_ID);
 	}
 
 }
