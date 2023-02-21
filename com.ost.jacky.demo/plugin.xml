@@ -27,7 +27,7 @@
          point="org.eclipse.ui.views">
       <view
             class="com.ost.jacky.demo.View"
-            name="View"
+            name="目录"
             id="com.ost.jacky.demo.view"
             inject="true">
       </view>
@@ -37,18 +37,6 @@
             id="com.ost.jacky.demo.viewers.view1"
             inject="true">
       </view>
-      <view
-            class="com.ost.jacky.demo.viewers.View2"
-            name="View2"
-            id="com.ost.jacky.demo.viewers.view2"
-            inject="true">
-      </view>
-      <view
-            class="com.ost.jacky.demo.viewers.View3"
-            name="View3"
-            id="com.ost.jacky.demo.viewers.view3"
-            inject="true">
-      </view>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
@@ -56,7 +44,7 @@
             class="com.ost.jacky.demo.editors.FileEditor"
             default="false"
             id="com.ost.jacky.demo.editors.FileEditor"
-            name="Patient Information Management">
+            name="文件内容">
       </editor>
    </extension>   
    

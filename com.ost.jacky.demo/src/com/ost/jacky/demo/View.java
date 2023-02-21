@@ -26,8 +26,6 @@ import com.ost.jacky.demo.viewers.viewerContentProvider.ViewContentProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 
 public class View extends ViewPart {
-	public static final String ID = "com.ost.jacky.demo.view";
-
 	
 	private TreeViewer treeViewer;
 
