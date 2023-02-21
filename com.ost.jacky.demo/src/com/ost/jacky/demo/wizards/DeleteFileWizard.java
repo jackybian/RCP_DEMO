@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IViewPart;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
@@ -108,7 +109,7 @@ public class DeleteFileWizard extends Wizard {
 				}
 			}
 		}
-
+		List<String> postList = new ArrayList<>();
 		if (null != queryCondition.getPostConditions()) {
 			String[] postConditions = queryCondition.getPostConditions().split("\\n");
 			if (null == postConditions || postConditions.length == 0) {
@@ -118,11 +119,13 @@ public class DeleteFileWizard extends Wizard {
 				String value = postConditions[index];
 				for (String s : list) {
 					if (s.endsWith(value)) {
+						postList.add(s);
 						set.remove(s);
 					}
 				}
 			}
 		}
+		
 		list.clear();
 		list.addAll(set);
 		return true;

@@ -32,7 +32,7 @@
             inject="true">
       </view>
       <view
-            class="com.ost.jacky.demo.view1"
+            class="com.ost.jacky.demo.View1"
             name="待删除文件预览"
             id="com.ost.jacky.demo.view1"
             inject="true">

@@ -36,12 +36,15 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+import com.ost.jacky.demo.View1;
 import com.ost.jacky.demo.editors.editorInput.FileEditorInput;
+import com.ost.jacky.demo.util.PluginUtil;
 import com.ost.jacky.demo.util.QueryCondition;
 import com.ost.jacky.demo.viewers.viewerContentProvider.FileInfoTableViewerContentProvider;
 import com.ost.jacky.demo.viewers.viewerContentProvider.FileInfoTableViewerLabelProvider;
@@ -267,7 +270,11 @@ public class FileEditor extends EditorPart {
 				}
 				tableViewer.setInput(resultList);
 				tableViewer.refresh();
+				IViewPart viewPart = getSite().getPage().findView(PluginUtil.MayDelFileList_ID);
+				View1 view1 = (View1)viewPart;
+				view1.getTableViewer().setInput(resultList);
 			}
+
 		}
 
 	}
