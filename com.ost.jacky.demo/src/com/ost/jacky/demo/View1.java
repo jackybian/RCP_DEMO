@@ -3,7 +3,11 @@ package com.ost.jacky.demo;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -36,8 +40,8 @@ import com.ost.jacky.demo.viewers.viewerContentProvider.ViewLabelProvider;
 
 public class View1 extends ViewPart{
 	private TableViewer tableViewer;
-
-	private List<String> list;
+	
+	private Set<String> delFileSet;
 	@Override
 	public void createPartControl(Composite parent) {
 		ViewForm viewForm = new ViewForm(parent, SWT.NONE);
@@ -47,10 +51,16 @@ public class View1 extends ViewPart{
 		tableViewer.setContentProvider(new FileInfoTableViewerContentProvider());
 		tableViewer.setLabelProvider(new FileInfoTableViewerLabelProvider());
 	    // 读入数据
-		if (null == list) {
-			list = new ArrayList<>();
+		if (null == delFileSet) {
+		    delFileSet = new HashSet<>();
 		}
-		list.add("1");
+		List<String> list = new ArrayList<>();
+		list.addAll(delFileSet);
+		Collections.sort(list, new Comparator<String>(){
+			public int compare(String o1, String o2) {
+				return o1.compareTo(o2);
+			}
+		});
 		tableViewer.setInput(list);
 		viewForm.setContent(tableViewer.getControl());
 	}
@@ -61,7 +71,7 @@ public class View1 extends ViewPart{
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		TableColumn tc1 = new TableColumn(table, SWT.LEFT);
-		tc1.setText("Name");
+		tc1.setText("文件名");
 		tc1.setWidth(1000);
 		tc1.setResizable(true);
 	}
@@ -75,4 +85,26 @@ public class View1 extends ViewPart{
 	public TableViewer getTableViewer() {
 		return tableViewer;
 	}
+
+	public Set<String> getDelFileSet() {
+		return delFileSet;
+	}
+
+	public void setDelFileSet(Set<String> delFileSet) {
+		this.delFileSet = delFileSet;
+	}
+	
+	public void refreshTableViewer(Set<String> delFileSet) {
+		this.delFileSet.addAll(delFileSet);
+		List<String> list = new ArrayList<>();
+		list.addAll(this.delFileSet);
+		Collections.sort(list, new Comparator<String>(){
+			public int compare(String o1, String o2) {
+				return o1.compareTo(o2);
+			}
+		});
+		tableViewer.setInput(list);
+		tableViewer.refresh();
+	}
+	
 }

@@ -9,9 +9,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,6 +73,8 @@ public class FileEditor extends EditorPart {
 	private List<String> list;
 
 	private List<String> searchList;
+
+	private Set<String> delFileSet;
 
 	private Map map;
 
@@ -134,25 +140,22 @@ public class FileEditor extends EditorPart {
 		}
 		tableViewer.setInput(list);
 		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
-		      @Override
-		      public void doubleClick(DoubleClickEvent event) {
-		        ISelection selection = tableViewer.getSelection();
-		        // 得到选中的项，注意方法是将得到的选项转换成 IStructuredSelection，再调用 getFirstElement 方法
-		        Object object = ((IStructuredSelection) selection).getFirstElement();
-		        // 再将对象转为实际的树节点对象
-		        String element = (String) object;
-		        System.out.println(element);
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				ISelection selection = tableViewer.getSelection();
+				// 得到选中的项，注意方法是将得到的选项转换成 IStructuredSelection，再调用 getFirstElement 方法
+				Object object = ((IStructuredSelection) selection).getFirstElement();
+				// 再将对象转为实际的树节点对象
+				String element = (String) object;
+				System.out.println(element);
 
-		      }
-		    });
-
-
-		
+			}
+		});
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
-		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName(), list));
-		toolBarManager.add(new SaveAction(fileEditorInput.getFileName(), list, map));
 		toolBarManager.add(new SearchAction(fileEditorInput.getFileName(), list));
+		toolBarManager.add(new DeletetAction(fileEditorInput.getFileName(), list));
+		toolBarManager.add(new SaveAction(fileEditorInput.getFileName(), list, map));
 		toolBarManager.add(new RefreshAction(fileEditorInput.getFileName(), list));
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
@@ -160,7 +163,7 @@ public class FileEditor extends EditorPart {
 	}
 
 	private void createTableViewer(Composite composite) {
-		tableViewer = new TableViewer(composite, SWT.FULL_SELECTION|SWT.MULTI);
+		tableViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.MULTI);
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -174,7 +177,7 @@ public class FileEditor extends EditorPart {
 	public void setFocus() {
 	}
 
-	class DeletePatientAction extends Action {
+	class DeletetAction extends Action {
 
 		private String fileName;
 
@@ -188,7 +191,7 @@ public class FileEditor extends EditorPart {
 			return ImageDescriptor.createFromURL(url);
 		}
 
-		public DeletePatientAction(String fileName, List<String> list) {
+		public DeletetAction(String fileName, List<String> list) {
 			this.setToolTipText("Delete File Name");
 			this.setImageDescriptor(createImageDescriptor());
 			this.fileName = fileName;
@@ -196,13 +199,30 @@ public class FileEditor extends EditorPart {
 		}
 
 		public void run() {
-			DeleteFileWizard wizard = new DeleteFileWizard();
-			wizard.setList(list);
-			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
-			dialog.setPageSize(500, 400);
-			dialog.open();
-			tableViewer.setInput(wizard.getList());
+			StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
+			delFileSet = new HashSet<>();
+			for (Object selectedObject : selection.toArray()) {
+				delFileSet.add(selectedObject.toString());
+			}
+			;
+			Set<String> remainFileSet = new HashSet<String>();
+			list.forEach(item -> {
+				if (!delFileSet.contains(item)) {
+					remainFileSet.add(item);
+				}
+			});
+			list.clear();
+			list.addAll(remainFileSet);
+			Collections.sort(list, new Comparator<String>(){
+				public int compare(String o1, String o2) {
+					return o1.compareTo(o2);
+				}
+			});
+			tableViewer.setInput(list);
 			tableViewer.refresh();
+			IViewPart viewPart = getSite().getPage().findView(PluginUtil.MayDelFileList_ID);
+			View1 view1 = (View1) viewPart;
+			view1.refreshTableViewer(delFileSet);
 		}
 
 	}
@@ -295,9 +315,6 @@ public class FileEditor extends EditorPart {
 				}
 				tableViewer.setInput(resultList);
 				tableViewer.refresh();
-				IViewPart viewPart = getSite().getPage().findView(PluginUtil.MayDelFileList_ID);
-				View1 view1 = (View1)viewPart;
-				view1.getTableViewer().setInput(resultList);
 			}
 
 		}
@@ -330,26 +347,22 @@ public class FileEditor extends EditorPart {
 		}
 
 		public void run() {
-//			try {
-//				FileInputStream fileInput = new FileInputStream(fileName);
-//				ObjectInputStream in = new ObjectInputStream(fileInput);
-//				Map map = (HashMap) in.readObject();
-//				if (null == list) {
-//					list = new ArrayList<>();
-//				}
-//				list.clear();
-//				for (Object k : map.keySet()) {
-//					list.add(k.toString());
-//				}
-//			} catch (Exception ex) {
-//
-//			}
-//			tableViewer.setInput(list);
-//			tableViewer.refresh();
-			  StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
-			  for (Object selectedObject : selection.toArray()) {
-				  System.out.println(selectedObject);
-			  }
+			try {
+				FileInputStream fileInput = new FileInputStream(fileName);
+				ObjectInputStream in = new ObjectInputStream(fileInput);
+				Map map = (HashMap) in.readObject();
+				if (null == list) {
+					list = new ArrayList<>();
+				}
+				list.clear();
+				for (Object k : map.keySet()) {
+					list.add(k.toString());
+				}
+			} catch (Exception ex) {
+
+			}
+			tableViewer.setInput(list);
+			tableViewer.refresh();
 		}
 
 	}
