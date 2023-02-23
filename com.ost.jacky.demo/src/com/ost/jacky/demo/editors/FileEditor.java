@@ -1,5 +1,6 @@
 package com.ost.jacky.demo.editors;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,11 +20,18 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableCursor;
 import org.eclipse.swt.custom.ViewForm;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -35,8 +43,10 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.osgi.framework.Bundle;
@@ -123,6 +133,21 @@ public class FileEditor extends EditorPart {
 
 		}
 		tableViewer.setInput(list);
+		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+		      @Override
+		      public void doubleClick(DoubleClickEvent event) {
+		        ISelection selection = tableViewer.getSelection();
+		        // 得到选中的项，注意方法是将得到的选项转换成 IStructuredSelection，再调用 getFirstElement 方法
+		        Object object = ((IStructuredSelection) selection).getFirstElement();
+		        // 再将对象转为实际的树节点对象
+		        String element = (String) object;
+		        System.out.println(element);
+
+		      }
+		    });
+
+
+		
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
 		toolBarManager.add(new DeletePatientAction(fileEditorInput.getFileName(), list));
@@ -135,7 +160,7 @@ public class FileEditor extends EditorPart {
 	}
 
 	private void createTableViewer(Composite composite) {
-		tableViewer = new TableViewer(composite, SWT.FULL_SELECTION);
+		tableViewer = new TableViewer(composite, SWT.FULL_SELECTION|SWT.MULTI);
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -305,22 +330,26 @@ public class FileEditor extends EditorPart {
 		}
 
 		public void run() {
-			try {
-				FileInputStream fileInput = new FileInputStream(fileName);
-				ObjectInputStream in = new ObjectInputStream(fileInput);
-				Map map = (HashMap) in.readObject();
-				if (null == list) {
-					list = new ArrayList<>();
-				}
-				list.clear();
-				for (Object k : map.keySet()) {
-					list.add(k.toString());
-				}
-			} catch (Exception ex) {
-
-			}
-			tableViewer.setInput(list);
-			tableViewer.refresh();
+//			try {
+//				FileInputStream fileInput = new FileInputStream(fileName);
+//				ObjectInputStream in = new ObjectInputStream(fileInput);
+//				Map map = (HashMap) in.readObject();
+//				if (null == list) {
+//					list = new ArrayList<>();
+//				}
+//				list.clear();
+//				for (Object k : map.keySet()) {
+//					list.add(k.toString());
+//				}
+//			} catch (Exception ex) {
+//
+//			}
+//			tableViewer.setInput(list);
+//			tableViewer.refresh();
+			  StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
+			  for (Object selectedObject : selection.toArray()) {
+				  System.out.println(selectedObject);
+			  }
 		}
 
 	}
