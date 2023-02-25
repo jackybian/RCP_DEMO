@@ -87,8 +87,6 @@ public class FileEditor extends EditorPart {
 	}
 
 	private boolean sort;
-	
-	
 
 	public TableViewer getViewer() {
 		return tableViewer;
@@ -138,8 +136,8 @@ public class FileEditor extends EditorPart {
 
 		} catch (Exception ex) {
 		}
-		this.setPartName("文件内容: 共有" + map.size() +"个文件");
-		Collections.sort(list, new Comparator<String>(){
+		this.setPartName("文件内容: 共有" + map.size() + "个文件");
+		Collections.sort(list, new Comparator<String>() {
 			public int compare(String o1, String o2) {
 				return o1.compareTo(o2);
 			}
@@ -148,7 +146,7 @@ public class FileEditor extends EditorPart {
 		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
-				Collections.sort(list, new Comparator<String>(){
+				Collections.sort(list, new Comparator<String>() {
 					public int compare(String o1, String o2) {
 						return o1.compareTo(o2);
 					}
@@ -157,7 +155,7 @@ public class FileEditor extends EditorPart {
 				tableViewer.refresh();
 				IEditorPart viewPart = getSite().getPage().getActiveEditor();
 				FileEditor fileEditor = (FileEditor) viewPart;
-				fileEditor.setPartName("文件内容: 共有" + list.size() +"个文件");
+				fileEditor.setPartName("文件内容: 共有" + list.size() + "个文件");
 			}
 		});
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
@@ -169,7 +167,7 @@ public class FileEditor extends EditorPart {
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
-		
+
 	}
 
 	private void createTableViewer(Composite composite) {
@@ -223,7 +221,7 @@ public class FileEditor extends EditorPart {
 			});
 			list.clear();
 			list.addAll(remainFileSet);
-			Collections.sort(list, new Comparator<String>(){
+			Collections.sort(list, new Comparator<String>() {
 				public int compare(String o1, String o2) {
 					return o1.compareTo(o2);
 				}
@@ -232,11 +230,11 @@ public class FileEditor extends EditorPart {
 			tableViewer.refresh();
 			IViewPart viewPart = getSite().getPage().findView(PluginUtil.MayDelFileList_ID);
 			View1 view1 = (View1) viewPart;
-			view1.setPartName("文件内容: 共有" + list.size() +"个文件");
+			view1.setPartName("文件内容: 共有" + list.size() + "个文件");
 			view1.refreshTableViewer(delFileSet);
 			IEditorPart editorPart = getSite().getPage().getActiveEditor();
 			FileEditor fileEditor = (FileEditor) editorPart;
-			fileEditor.setPartName("文件内容: 共有" + list.size() +"个文件");
+			fileEditor.setPartName("文件内容: 共有" + list.size() + "个文件");
 		}
 
 	}
@@ -266,6 +264,11 @@ public class FileEditor extends EditorPart {
 		}
 
 		public void run() {
+			boolean bool = MessageDialog.openConfirm(Display.getDefault().getShells()[0], "确认",
+					"确认保存" + list.size() + "个文件");
+			if (!bool) {
+				return;
+			}
 			FileDialog dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
 			String selectedDir = dialog.open();
 			System.out.println("选择文件夹：" + selectedDir);
@@ -371,7 +374,7 @@ public class FileEditor extends EditorPart {
 				for (Object k : map.keySet()) {
 					list.add(k.toString());
 				}
-				Collections.sort(list, new Comparator<String>(){
+				Collections.sort(list, new Comparator<String>() {
 					public int compare(String o1, String o2) {
 						return o1.compareTo(o2);
 					}
@@ -387,7 +390,7 @@ public class FileEditor extends EditorPart {
 			view1.refreshTableViewer(view1.getDelFileSet());
 			IEditorPart editorPart = getSite().getPage().getActiveEditor();
 			FileEditor fileEditor = (FileEditor) editorPart;
-			fileEditor.setPartName("文件内容: 共有" + list.size() +"个文件");
+			fileEditor.setPartName("文件内容: 共有" + list.size() + "个文件");
 		}
 	}
 }
