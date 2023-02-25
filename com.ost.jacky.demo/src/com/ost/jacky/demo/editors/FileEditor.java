@@ -74,7 +74,7 @@ public class FileEditor extends EditorPart {
 
 	private List<String> searchList;
 
-	private Set<String> delFileSet;
+	private Set<String> delFileSet = new HashSet<>();
 
 	private Map map;
 
@@ -87,6 +87,8 @@ public class FileEditor extends EditorPart {
 	}
 
 	private boolean sort;
+	
+	
 
 	public TableViewer getViewer() {
 		return tableViewer;
@@ -119,7 +121,6 @@ public class FileEditor extends EditorPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		FileEditorInput fileEditorInput = (FileEditorInput) this.getEditorInput();
-		System.out.println("createPartControl fileName: " + fileEditorInput.getFileName());
 		ViewForm viewForm = new ViewForm(parent, SWT.NONE);
 		viewForm.setLayout(new FillLayout());
 		createTableViewer(viewForm);
@@ -136,19 +137,27 @@ public class FileEditor extends EditorPart {
 			}
 
 		} catch (Exception ex) {
-
 		}
+		this.setPartName("文件内容: 共有" + map.size() +"个文件");
+		Collections.sort(list, new Comparator<String>(){
+			public int compare(String o1, String o2) {
+				return o1.compareTo(o2);
+			}
+		});
 		tableViewer.setInput(list);
 		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
-				ISelection selection = tableViewer.getSelection();
-				// 得到选中的项，注意方法是将得到的选项转换成 IStructuredSelection，再调用 getFirstElement 方法
-				Object object = ((IStructuredSelection) selection).getFirstElement();
-				// 再将对象转为实际的树节点对象
-				String element = (String) object;
-				System.out.println(element);
-
+				Collections.sort(list, new Comparator<String>(){
+					public int compare(String o1, String o2) {
+						return o1.compareTo(o2);
+					}
+				});
+				tableViewer.setInput(list);
+				tableViewer.refresh();
+				IEditorPart viewPart = getSite().getPage().getActiveEditor();
+				FileEditor fileEditor = (FileEditor) viewPart;
+				fileEditor.setPartName("文件内容: 共有" + list.size() +"个文件");
 			}
 		});
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
@@ -160,6 +169,7 @@ public class FileEditor extends EditorPart {
 		toolBarManager.update(true);
 		viewForm.setTopLeft(toolBar);
 		viewForm.setContent(tableViewer.getControl());
+		
 	}
 
 	private void createTableViewer(Composite composite) {
@@ -222,7 +232,11 @@ public class FileEditor extends EditorPart {
 			tableViewer.refresh();
 			IViewPart viewPart = getSite().getPage().findView(PluginUtil.MayDelFileList_ID);
 			View1 view1 = (View1) viewPart;
+			view1.setPartName("文件内容: 共有" + list.size() +"个文件");
 			view1.refreshTableViewer(delFileSet);
+			IEditorPart editorPart = getSite().getPage().getActiveEditor();
+			FileEditor fileEditor = (FileEditor) editorPart;
+			fileEditor.setPartName("文件内容: 共有" + list.size() +"个文件");
 		}
 
 	}
@@ -304,7 +318,6 @@ public class FileEditor extends EditorPart {
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getShells()[0], wizard);
 			dialog.setPageSize(100, 100);
 			dialog.open();
-			System.out.println("searchList size = " + searchList.size());
 			if (searchList.size() > 0) {
 				resultList = new ArrayList<>();
 				String reg = searchList.get(searchList.size() - 1);
@@ -358,12 +371,23 @@ public class FileEditor extends EditorPart {
 				for (Object k : map.keySet()) {
 					list.add(k.toString());
 				}
+				Collections.sort(list, new Comparator<String>(){
+					public int compare(String o1, String o2) {
+						return o1.compareTo(o2);
+					}
+				});
 			} catch (Exception ex) {
 
 			}
 			tableViewer.setInput(list);
 			tableViewer.refresh();
+			IViewPart viewPart = getSite().getPage().findView(PluginUtil.MayDelFileList_ID);
+			View1 view1 = (View1) viewPart;
+			view1.getDelFileSet().clear();
+			view1.refreshTableViewer(view1.getDelFileSet());
+			IEditorPart editorPart = getSite().getPage().getActiveEditor();
+			FileEditor fileEditor = (FileEditor) editorPart;
+			fileEditor.setPartName("文件内容: 共有" + list.size() +"个文件");
 		}
-
 	}
 }

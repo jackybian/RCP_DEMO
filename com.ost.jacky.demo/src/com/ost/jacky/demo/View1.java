@@ -49,6 +49,10 @@ public class View1 extends ViewPart {
 	private TableViewer tableViewer;
 
 	private Set<String> delFileSet;
+	
+	public void setPartName(String content) {
+		super.setPartName(content);
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -70,6 +74,7 @@ public class View1 extends ViewPart {
 			}
 		});
 		tableViewer.setInput(list);
+		this.setPartName("文件内容: 共有" + this.delFileSet.size() +"个文件");
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		ToolBarManager toolBarManager = new ToolBarManager(toolBar);
 		toolBarManager.add(new CancelAction(delFileSet));
@@ -117,6 +122,7 @@ public class View1 extends ViewPart {
 		});
 		tableViewer.setInput(list);
 		tableViewer.refresh();
+		this.setPartName("文件内容: 共有" + this.delFileSet.size() +"个文件");
 	}
 
 	class CancelAction extends Action {
